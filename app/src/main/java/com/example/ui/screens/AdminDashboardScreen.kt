@@ -915,26 +915,26 @@ private fun AdminMediaTab(
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         item {
-            Row(
+            Card(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
+                shape = RoundedCornerShape(16.dp),
+                colors = CardDefaults.cardColors(containerColor = GoldContainer),
+                border = androidx.compose.foundation.BorderStroke(1.dp, GoldPrimary)
             ) {
-                Column {
-                    Text("Portfolio & Films Manager", fontSize = 16.sp, fontWeight = FontWeight.Bold, color = TextPrimary)
-                    Text("Only authorized studio admins can manage public gallery content.", fontSize = 11.sp, color = TextSecondary)
-                }
-
-                Button(
-                    onClick = { showAddDialog = true },
-                    colors = ButtonDefaults.buttonColors(containerColor = GoldPrimary, contentColor = Color.Black),
-                    shape = RoundedCornerShape(8.dp),
-                    contentPadding = PaddingValues(horizontal = 10.dp, vertical = 4.dp),
-                    modifier = Modifier.height(34.dp)
-                ) {
-                    Icon(Icons.Default.Add, contentDescription = null, modifier = Modifier.size(16.dp))
-                    Spacer(modifier = Modifier.width(4.dp))
-                    Text("Add Media", fontSize = 11.sp, fontWeight = FontWeight.Bold)
+                Column(modifier = Modifier.padding(16.dp)) {
+                    Text("Upload Photos & Videos to Gallery", fontSize = 16.sp, fontWeight = FontWeight.Bold, color = GoldLight)
+                    Text("Add client wedding photos, portrait stills, or 4K cinematic films directly to public gallery.", fontSize = 11.sp, color = TextSecondary)
+                    Spacer(modifier = Modifier.height(12.dp))
+                    Button(
+                        onClick = { showAddDialog = true },
+                        colors = ButtonDefaults.buttonColors(containerColor = GoldPrimary, contentColor = Color.Black),
+                        shape = RoundedCornerShape(10.dp),
+                        modifier = Modifier.fillMaxWidth().height(44.dp).testTag("admin_upload_media_btn")
+                    ) {
+                        Icon(Icons.Default.CloudUpload, contentDescription = null, modifier = Modifier.size(18.dp))
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text("Upload Photo or Video from Device", fontSize = 13.sp, fontWeight = FontWeight.Bold)
+                    }
                 }
             }
         }
@@ -1005,7 +1005,7 @@ private fun AdminMediaTab(
 }
 
 @Composable
-private fun AddMediaDialog(
+fun AddMediaDialog(
     onDismiss: () -> Unit,
     onAdd: (title: String, category: String, type: String, url: String, vidUrl: String?, caption: String, duration: String?, isFeatured: Boolean) -> Unit
 ) {

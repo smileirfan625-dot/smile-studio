@@ -49,6 +49,7 @@ This project is a complete dual-target platform:
 *(No demo password or hints are displayed publicly)*
 
 ### Admin Portal Capabilities:
+* **Gallery Photo & Video Uploading**: Upload high-resolution photos (`JPG`, `PNG`, `WEBP`) and cinematic videos (`MP4`, `MOV`, `WebM`) directly from your phone/computer or via media links.
 * **Booking Management**: Approve, confirm, reschedule, or cancel client bookings.
 * **Payment Tracking**: Record deposits (25% advance) and full payments in Indian Rupees (INR).
 * **Customer Communications**: 1-tap WhatsApp messages pre-filled with client names and booking references.
@@ -56,6 +57,36 @@ This project is a complete dual-target platform:
 * **Availability Calendar**: Block dates from client reservations to prevent double-booking.
 * **Gallery & Portfolio**: Add and curate published wedding photos and 4K film reels.
 * **Inquiries Inbox**: Manage incoming custom requirements and messages.
+
+---
+
+## 📸 How to Upload Photos & Videos
+
+### 1. On the Website (GitHub Pages):
+* **From the Public Gallery page**:
+  1. Go to the **Gallery** tab.
+  2. Click the gold **"Upload Photos & Videos"** button at the top right, or click **"Add Photos & Videos Now"** in the quick upload banner.
+  3. Enter the admin password (`9741`) if prompted.
+  4. Click **"Click to Choose Photo or Video from Device"** to select any photo or video file from your phone or PC, or paste a direct media URL.
+  5. Select the event category (Wedding, Pre-Wedding, Portraits, etc.) and enter a title.
+  6. Click **"Publish Directly to Gallery"** — your photo or video will appear instantly in the live gallery!
+* **From the Studio Management Portal**:
+  1. Tap the shield icon in the top navigation bar to open the Admin Portal.
+  2. Enter admin password `9741`.
+  3. Go to the **Portfolio Content** tab.
+  4. Use the uploader to add or delete photos and videos.
+
+### 2. In the Android App (APK):
+* **From the Gallery Screen**:
+  1. Open the **Gallery** tab.
+  2. Tap the **"Upload"** button in the top header or the gold **"Upload Media"** Floating Action Button at the bottom right.
+  3. Enter admin password `9741` when prompted.
+  4. Tap **"Choose Photo from Device"** or **"Choose Video from Device"** to open your phone's photo/video picker, or paste an image/video URL.
+  5. Review the live preview, choose the category, and tap **"Add to Gallery"**.
+* **From the Admin Portal**:
+  1. Tap the Admin icon in the top bar.
+  2. Enter password `9741`.
+  3. Tap the **Portfolio** tab (Tab 3) and click **"Upload Photo or Video from Device"**.
 
 ---
 

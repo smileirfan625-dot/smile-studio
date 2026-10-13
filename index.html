@@ -257,12 +257,33 @@
 
     <!-- PAGE 3: PORTFOLIO GALLERY -->
     <section id="page-portfolio" class="page-section hidden max-w-7xl mx-auto px-4 py-12">
-      <div class="flex flex-col md:flex-row md:items-end justify-between mb-8">
+      <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
         <div>
           <span class="text-xs font-bold text-studio-gold tracking-widest uppercase">Master Works</span>
           <h1 class="text-3xl font-extrabold text-white mt-1">Portfolio & Films Gallery</h1>
           <p class="text-gray-400 text-sm mt-1">Genuine captures and cinematic highlights produced by Smile Studio.</p>
         </div>
+        <div class="flex items-center gap-3">
+          <button onclick="openGalleryUploadModal()" class="gold-gradient text-black font-extrabold text-xs px-5 py-2.5 rounded-xl flex items-center gap-2 transition-all shadow-lg shadow-amber-500/20 hover:brightness-110">
+            <i class="fa-solid fa-cloud-arrow-up text-sm"></i> Upload Photos & Videos
+          </button>
+        </div>
+      </div>
+
+      <!-- Quick Upload Banner for Studio Media -->
+      <div class="mb-6 p-4 rounded-2xl bg-studio-surface border border-studio-border/80 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full bg-studio-goldBg border border-studio-gold text-studio-gold flex items-center justify-center text-lg">
+            <i class="fa-solid fa-camera"></i>
+          </div>
+          <div>
+            <h4 class="text-xs font-bold text-white">Studio Management Media Upload</h4>
+            <p class="text-[11px] text-gray-400">Add original wedding photos, couple reels, and 4K video clips directly to the client gallery.</p>
+          </div>
+        </div>
+        <button onclick="openGalleryUploadModal()" class="w-full sm:w-auto bg-studio-card hover:bg-studio-surface border border-studio-gold text-studio-goldLight hover:text-white px-4 py-2 rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition-all whitespace-nowrap">
+          <i class="fa-solid fa-plus-circle text-studio-gold"></i> Add Photos & Videos Now
+        </button>
       </div>
 
       <!-- Filter Buttons -->
@@ -660,6 +681,148 @@
     </div>
   </footer>
 
+  <!-- FULLSCREEN LIGHTBOX MODAL FOR PHOTOS & VIDEOS -->
+  <div id="media-lightbox" class="hidden fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="relative max-w-4xl w-full bg-studio-surface border border-studio-border rounded-2xl overflow-hidden shadow-2xl flex flex-col max-h-[92vh]">
+      <!-- Close Button -->
+      <button onclick="closeLightbox()" class="absolute top-4 right-4 z-20 w-9 h-9 rounded-full bg-black/75 hover:bg-black text-gray-300 hover:text-white flex items-center justify-center border border-white/20 transition-colors">
+        <i class="fa-solid fa-xmark text-base"></i>
+      </button>
+
+      <!-- Media Display Area -->
+      <div id="lightbox-media-container" class="bg-black flex items-center justify-center overflow-hidden min-h-[300px] max-h-[65vh]">
+        <!-- Image or Video tag inserted dynamically -->
+      </div>
+
+      <!-- Info & Booking CTA Bar -->
+      <div class="p-5 bg-studio-surface border-t border-studio-border flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <div>
+          <div class="flex items-center gap-2 mb-1">
+            <span id="lightbox-cat" class="text-[10px] font-bold text-studio-gold uppercase tracking-wider bg-studio-goldBg px-2 py-0.5 rounded border border-studio-gold/30">Category</span>
+            <span id="lightbox-type" class="text-[10px] text-gray-400 font-semibold uppercase">PHOTO</span>
+          </div>
+          <h3 id="lightbox-title" class="text-base font-bold text-white">Title</h3>
+          <p id="lightbox-desc" class="text-xs text-gray-400 mt-0.5">Description</p>
+        </div>
+        <div class="flex items-center gap-3 w-full sm:w-auto">
+          <button onclick="bookThisStyle()" class="w-full sm:w-auto gold-gradient text-black font-extrabold text-xs px-5 py-2.5 rounded-xl hover:brightness-110 flex items-center justify-center gap-2 whitespace-nowrap shadow-lg shadow-amber-500/20">
+            <i class="fa-solid fa-calendar-check"></i> Book This Event Style
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- GALLERY DIRECT UPLOAD MODAL -->
+  <div id="gallery-upload-modal" class="hidden fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
+    <div class="relative max-w-xl w-full bg-studio-surface border border-studio-border gold-border-glow rounded-3xl p-6 sm:p-8 my-8 shadow-2xl">
+      <!-- Close Button -->
+      <button onclick="closeGalleryUploadModal()" class="absolute top-5 right-5 w-8 h-8 rounded-full bg-studio-card hover:bg-studio-border text-gray-300 hover:text-white flex items-center justify-center border border-studio-border transition-colors">
+        <i class="fa-solid fa-xmark text-sm"></i>
+      </button>
+
+      <!-- Step 1: Verification if not yet logged in -->
+      <div id="upload-auth-gate" class="text-center py-4">
+        <div class="w-14 h-14 rounded-full bg-studio-goldBg border border-studio-gold flex items-center justify-center text-studio-gold text-2xl mx-auto mb-4">
+          <i class="fa-solid fa-lock"></i>
+        </div>
+        <h3 class="text-xl font-bold text-white">Studio Admin Verification</h3>
+        <p class="text-xs text-gray-400 mt-1 mb-6">Enter the administrator password to upload photos and videos directly to the public client gallery.</p>
+        
+        <form onsubmit="handleGalleryAuthUnlock(event)" class="space-y-4 max-w-xs mx-auto">
+          <div>
+            <input type="password" id="gallery-upload-pass" required placeholder="Enter Admin Password" class="w-full bg-studio-card border border-studio-border rounded-xl px-4 py-2.5 text-center text-sm tracking-widest focus:outline-none focus:border-studio-gold text-white">
+            <div id="gallery-upload-auth-err" class="hidden text-xs text-rose-400 mt-2">Incorrect Administrator Password. Please try again.</div>
+          </div>
+          <button type="submit" class="w-full gold-gradient text-black font-extrabold py-2.5 rounded-xl text-xs hover:brightness-110">
+            Unlock & Open Uploader
+          </button>
+        </form>
+      </div>
+
+      <!-- Step 2: Upload Form (visible when unlocked) -->
+      <div id="upload-form-container" class="hidden space-y-4">
+        <div class="flex items-center gap-3 border-b border-studio-border pb-4">
+          <div class="w-10 h-10 rounded-full bg-studio-goldBg border border-studio-gold text-studio-gold flex items-center justify-center text-lg">
+            <i class="fa-solid fa-cloud-arrow-up"></i>
+          </div>
+          <div>
+            <h3 class="text-lg font-bold text-white">Upload Media to Public Gallery</h3>
+            <p class="text-xs text-gray-400">Add photos and videos directly to Smile Studio's live portfolio.</p>
+          </div>
+        </div>
+
+        <!-- File Upload Area -->
+        <input type="file" id="modal-file-input" accept="image/*,video/*" class="hidden" onchange="handleModalFileUpload(event)">
+        <div onclick="document.getElementById('modal-file-input').click()" class="border-2 border-dashed border-studio-gold/60 hover:border-studio-gold bg-studio-card hover:bg-studio-card/80 rounded-2xl p-6 text-center cursor-pointer transition-all group">
+          <div class="w-12 h-12 rounded-full bg-studio-goldBg border border-studio-gold text-studio-gold flex items-center justify-center text-xl mx-auto mb-2 group-hover:scale-110 transition-transform">
+            <i class="fa-solid fa-cloud-arrow-up"></i>
+          </div>
+          <div class="text-xs font-bold text-white group-hover:text-studio-goldLight">Click to Choose Photo or Video from Device</div>
+          <div class="text-[10px] text-gray-400 mt-1">Select any image or video from your phone/computer (JPG, PNG, WEBP, MP4, MOV, WebM)</div>
+        </div>
+
+        <!-- Live Preview -->
+        <div id="modal-upload-preview" class="hidden bg-black/60 rounded-xl p-3 border border-studio-border flex items-center gap-3">
+          <div id="modal-preview-media" class="w-16 h-16 rounded-lg bg-studio-surface overflow-hidden flex items-center justify-center flex-shrink-0"></div>
+          <div class="flex-grow min-w-0 text-xs">
+            <div id="modal-preview-name" class="font-bold text-white truncate">file.jpg</div>
+            <div id="modal-preview-size" class="text-gray-400 text-[10px]">Loaded from device</div>
+            <span class="inline-block mt-1 bg-emerald-950 text-emerald-400 text-[9px] font-bold px-2 py-0.5 rounded-full border border-emerald-800">Ready to Publish</span>
+          </div>
+        </div>
+
+        <!-- Media Details -->
+        <div>
+          <label class="block text-[11px] font-bold text-gray-300 mb-1">Item Title *</label>
+          <input type="text" id="modal-port-title" placeholder="e.g. Royal Bengaluru Palace Wedding" class="w-full bg-studio-card border border-studio-border rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-studio-gold">
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-[11px] font-bold text-gray-300 mb-1">Category *</label>
+            <select id="modal-port-cat" class="w-full bg-studio-card border border-studio-border rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-studio-gold">
+              <option value="Wedding">Wedding</option>
+              <option value="Pre-Wedding">Pre-Wedding</option>
+              <option value="Portraits">Portraits</option>
+              <option value="Family">Family</option>
+              <option value="Birthday">Birthday</option>
+              <option value="Cinematic Video">Cinematic Video</option>
+              <option value="Reels">Reels & Shorts</option>
+              <option value="Events">Events</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-[11px] font-bold text-gray-300 mb-1">Media Type *</label>
+            <select id="modal-port-type" class="w-full bg-studio-card border border-studio-border rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-studio-gold">
+              <option value="PHOTO">PHOTO</option>
+              <option value="VIDEO">VIDEO</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-[11px] font-bold text-gray-300 mb-1">Or Paste Direct Media URL</label>
+          <input type="text" id="modal-port-url" placeholder="https://example.com/photo.jpg or video.mp4" class="w-full bg-studio-card border border-studio-border rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-studio-gold">
+        </div>
+
+        <div>
+          <label class="block text-[11px] font-bold text-gray-300 mb-1">Description / Caption</label>
+          <input type="text" id="modal-port-desc" placeholder="Location, couple, or event highlights" class="w-full bg-studio-card border border-studio-border rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-studio-gold">
+        </div>
+
+        <div class="pt-2 flex gap-3">
+          <button type="button" onclick="closeGalleryUploadModal()" class="w-1/3 bg-studio-card border border-studio-border hover:bg-studio-surface text-gray-300 font-bold py-2.5 rounded-xl text-xs">
+            Cancel
+          </button>
+          <button type="button" onclick="submitModalGalleryUpload()" class="w-2/3 gold-gradient text-black font-extrabold py-2.5 rounded-xl text-xs hover:brightness-110 flex items-center justify-center gap-2 shadow-lg shadow-amber-500/20">
+            <i class="fa-solid fa-cloud-arrow-up"></i> Publish Directly to Gallery
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- SCRIPT ENGINE -->
   <script>
     // CORE DATA
@@ -699,7 +862,7 @@
       { id: "pkg_custom", name: "Custom Event Package", price: 20000, hours: 4, crew: 2, photos: "120+ Curated Stills", video: "Customizable Add-ons", days: 10, desc: "Tailored coverage designed specifically around your venue, schedule, and unique vision." }
     ];
 
-    let portfolioItems = [
+    const DEFAULT_PORTFOLIO_ITEMS = [
       { id: "p1", title: "Royal Bengaluru Palace Wedding", cat: "Wedding", type: "PHOTO", img: "https://images.unsplash.com/photo-1519741497674-611481863552?w=900&auto=format&fit=crop", desc: "Varmala exchange under floral chandeliers." },
       { id: "p2", title: "Golden Hour Pre-Wedding Film", cat: "Cinematic Video", type: "VIDEO", img: "https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=900&auto=format&fit=crop", desc: "Romantic 4K hills destination couple shoot." },
       { id: "p3", title: "Bridal Elegance & Mehndi Jewels", cat: "Portraits", type: "PHOTO", img: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=900&auto=format&fit=crop", desc: "Intricate jewelry and candid emotional bridal gaze." },
@@ -708,6 +871,26 @@
       { id: "p6", title: "Little Joy: 1st Birthday Wonder", cat: "Birthday", type: "PHOTO", img: "https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=900&auto=format&fit=crop", desc: "Pure innocent smiles and colorful balloons." },
       { id: "p7", title: "Three Generations of Love", cat: "Family", type: "PHOTO", img: "https://images.unsplash.com/photo-1609220136736-443140cffec6?w=900&auto=format&fit=crop", desc: "Grandparents, parents, and grandchild memories." }
     ];
+
+    function getStoredPortfolio() {
+      try {
+        const saved = localStorage.getItem('smile_studio_portfolio');
+        if (saved) return JSON.parse(saved);
+      } catch (e) {
+        console.error("Failed to parse stored portfolio", e);
+      }
+      return [...DEFAULT_PORTFOLIO_ITEMS];
+    }
+
+    function saveStoredPortfolio(items) {
+      try {
+        localStorage.setItem('smile_studio_portfolio', JSON.stringify(items));
+      } catch (e) {
+        console.warn("Storage quota exceeded for local media", e);
+      }
+    }
+
+    let portfolioItems = getStoredPortfolio();
 
     let blockedDates = [
       { date: "2026-10-25", reason: "Diwali Festival & Studio Gear Maintenance" }
@@ -855,19 +1038,36 @@
     function renderGallery(cat = 'All') {
       const container = document.getElementById('gallery-grid');
       const filtered = cat === 'All' ? portfolioItems : portfolioItems.filter(i => i.cat === cat);
-      container.innerHTML = filtered.map(i => `
-        <div class="bg-studio-surface border border-studio-border rounded-xl overflow-hidden group relative aspect-[4/5] cursor-pointer" onclick="openLightbox('${i.title}', '${i.img}', '${i.desc}', '${i.type}')">
-          <img src="${i.img}" alt="${i.title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-          <div class="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent opacity-80 group-hover:opacity-90 transition-opacity"></div>
-          <div class="absolute top-2.5 right-2.5 bg-black/70 border border-studio-gold/30 text-studio-goldLight text-[9px] font-bold px-2 py-0.5 rounded-full">
-            ${i.type === 'VIDEO' ? '<i class="fa-solid fa-play mr-1"></i> VIDEO' : '<i class="fa-solid fa-camera mr-1"></i> PHOTO'}
+      container.innerHTML = filtered.map(i => {
+        const safeTitle = (i.title || '').replace(/'/g, "\\'");
+        const safeImg = (i.img || '').replace(/'/g, "\\'");
+        const safeDesc = (i.desc || '').replace(/'/g, "\\'");
+        const isVid = i.type === 'VIDEO' || (i.img && (i.img.startsWith('data:video') || i.img.endsWith('.mp4') || i.img.endsWith('.webm')));
+        
+        return `
+          <div class="bg-studio-surface border border-studio-border hover:border-studio-gold rounded-xl overflow-hidden group relative aspect-[4/5] cursor-pointer transition-all shadow-md" onclick="openLightbox('${safeTitle}', '${safeImg}', '${safeDesc}', '${i.type}')">
+            ${isVid && i.img && i.img.startsWith('data:video')
+              ? `<video src="${i.img}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" muted playsinline></video>`
+              : `<img src="${i.img}" alt="${safeTitle}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">`
+            }
+            <div class="absolute inset-0 bg-gradient-to-t from-black via-black/25 to-transparent opacity-80 group-hover:opacity-90 transition-opacity"></div>
+            <div class="absolute top-2.5 right-2.5 bg-black/75 border border-studio-gold/30 text-studio-goldLight text-[9px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1">
+              ${isVid ? '<i class="fa-solid fa-play text-[8px]"></i> VIDEO' : '<i class="fa-solid fa-camera text-[8px]"></i> PHOTO'}
+            </div>
+            ${isVid ? `
+              <div class="absolute inset-0 flex items-center justify-center">
+                <div class="w-11 h-11 rounded-full bg-black/60 border border-studio-gold text-studio-gold flex items-center justify-center text-xs group-hover:scale-110 group-hover:bg-studio-gold group-hover:text-black transition-all shadow-lg">
+                  <i class="fa-solid fa-play ml-0.5"></i>
+                </div>
+              </div>
+            ` : ''}
+            <div class="absolute bottom-3 left-3 right-3">
+              <span class="text-[10px] text-studio-gold font-bold tracking-wider uppercase block">${i.cat}</span>
+              <h4 class="text-xs font-bold text-white truncate">${i.title}</h4>
+            </div>
           </div>
-          <div class="absolute bottom-3 left-3 right-3">
-            <span class="text-[10px] text-studio-gold font-bold tracking-wider uppercase block">${i.cat}</span>
-            <h4 class="text-xs font-bold text-white truncate">${i.title}</h4>
-          </div>
-        </div>
-      `).join('');
+        `;
+      }).join('');
     }
 
     function filterGallery(cat) {
@@ -1747,35 +1947,227 @@
       const title = document.getElementById('port-title').value.trim();
       const cat = document.getElementById('port-cat').value.trim() || "Wedding";
       const type = document.getElementById('port-type').value;
-      const img = uploadedMediaDataUrl || document.getElementById('port-img').value.trim() || "https://images.unsplash.com/photo-1519741497674-611481863552?w=800&auto=format&fit=crop";
-      const desc = document.getElementById('port-desc').value.trim();
+      const img = uploadedMediaDataUrl || document.getElementById('port-img').value.trim();
+      const desc = document.getElementById('port-desc').value.trim() || `${cat} moment captured by Smile Studio`;
 
-      if (title) {
-        portfolioItems.unshift({ id: "p_" + Date.now(), title, cat, type, img, desc });
-        renderAdminPortfolio();
-        renderGallery();
-        document.getElementById('port-title').value = '';
-        document.getElementById('port-desc').value = '';
-        document.getElementById('port-img').value = '';
-        uploadedMediaDataUrl = null;
-        document.getElementById('port-upload-preview')?.classList.add('hidden');
-        const fileInput = document.getElementById('port-file-input');
-        if (fileInput) fileInput.value = '';
-        alert("Success! Photo/Video added directly to Smile Studio public gallery.");
-      } else {
+      if (!title) {
         alert("Please enter a title for the media item.");
+        return;
       }
+      if (!img) {
+        alert("Please choose a photo or video file from your device, or paste a media URL.");
+        return;
+      }
+
+      const newItem = {
+        id: "p_" + Date.now(),
+        title: title,
+        cat: cat,
+        type: type,
+        img: img,
+        desc: desc
+      };
+
+      portfolioItems.unshift(newItem);
+      saveStoredPortfolio(portfolioItems);
+      renderAdminPortfolio();
+      renderGallery();
+
+      document.getElementById('port-title').value = '';
+      document.getElementById('port-desc').value = '';
+      document.getElementById('port-img').value = '';
+      uploadedMediaDataUrl = null;
+      document.getElementById('port-upload-preview')?.classList.add('hidden');
+      const fileInput = document.getElementById('port-file-input');
+      if (fileInput) fileInput.value = '';
+
+      alert(`Success! "${title}" has been published directly to the Smile Studio gallery.`);
     }
 
     function removePortfolioItem(index) {
-      portfolioItems.splice(index, 1);
-      renderAdminPortfolio();
-      renderGallery();
+      if (confirm(`Remove "${portfolioItems[index].title}" from public gallery?`)) {
+        portfolioItems.splice(index, 1);
+        saveStoredPortfolio(portfolioItems);
+        renderAdminPortfolio();
+        renderGallery();
+      }
     }
 
+    let currentLightboxItem = null;
+
     function openLightbox(title, img, desc, type) {
-      alert(`${title}\n\n${desc}\n\nType: ${type}\nTo book this style, tap 'Book Now' in the navigation bar!`);
+      currentLightboxItem = { title, img, desc, type };
+      const modal = document.getElementById('media-lightbox');
+      const container = document.getElementById('lightbox-media-container');
+      const titleEl = document.getElementById('lightbox-title');
+      const catEl = document.getElementById('lightbox-cat');
+      const typeEl = document.getElementById('lightbox-type');
+      const descEl = document.getElementById('lightbox-desc');
+
+      if (!modal || !container) return;
+
+      titleEl.innerText = title;
+      descEl.innerText = desc || "Cinematic coverage by Smile Studio.";
+      typeEl.innerText = type || "PHOTO";
+
+      const matched = portfolioItems.find(p => p.title === title) || {};
+      catEl.innerText = matched.cat || "Portfolio";
+
+      const isVideo = type === 'VIDEO' || 
+        (img && (img.startsWith('data:video') || img.endsWith('.mp4') || img.endsWith('.webm') || img.endsWith('.mov')));
+
+      if (isVideo) {
+        container.innerHTML = `
+          <video src="${img}" controls autoplay playsinline class="max-h-[65vh] max-w-full object-contain">
+            Your browser does not support HTML5 video playback.
+          </video>
+        `;
+      } else {
+        container.innerHTML = `
+          <img src="${img}" alt="${title}" class="max-h-[65vh] max-w-full object-contain">
+        `;
+      }
+
+      modal.classList.remove('hidden');
     }
+
+    function closeLightbox() {
+      const modal = document.getElementById('media-lightbox');
+      const container = document.getElementById('lightbox-media-container');
+      if (container) container.innerHTML = '';
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function bookThisStyle() {
+      closeLightbox();
+      if (currentLightboxItem && currentLightboxItem.cat) {
+        selectEventCategory(currentLightboxItem.cat);
+      } else {
+        startBooking();
+      }
+    }
+
+    // GALLERY DIRECT UPLOAD MODAL ENGINE
+    let modalUploadedMediaUrl = null;
+
+    function openGalleryUploadModal() {
+      const modal = document.getElementById('gallery-upload-modal');
+      const authGate = document.getElementById('upload-auth-gate');
+      const formContainer = document.getElementById('upload-form-container');
+
+      if (!modal) return;
+
+      if (isAdminLoggedIn) {
+        authGate.classList.add('hidden');
+        formContainer.classList.remove('hidden');
+      } else {
+        authGate.classList.remove('hidden');
+        formContainer.classList.add('hidden');
+        document.getElementById('gallery-upload-pass').value = '';
+        document.getElementById('gallery-upload-auth-err')?.classList.add('hidden');
+      }
+
+      modal.classList.remove('hidden');
+    }
+
+    function closeGalleryUploadModal() {
+      const modal = document.getElementById('gallery-upload-modal');
+      if (modal) modal.classList.add('hidden');
+      modalUploadedMediaUrl = null;
+      document.getElementById('modal-upload-preview')?.classList.add('hidden');
+      const fileInput = document.getElementById('modal-file-input');
+      if (fileInput) fileInput.value = '';
+    }
+
+    function handleGalleryAuthUnlock(e) {
+      e.preventDefault();
+      const pass = document.getElementById('gallery-upload-pass').value.trim();
+      const err = document.getElementById('gallery-upload-auth-err');
+
+      if (pass === STUDIO_CONFIG.adminPass) {
+        isAdminLoggedIn = true;
+        err.classList.add('hidden');
+        document.getElementById('upload-auth-gate').classList.add('hidden');
+        document.getElementById('upload-form-container').classList.remove('hidden');
+      } else {
+        err.classList.remove('hidden');
+      }
+    }
+
+    function handleModalFileUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const isVideo = file.type.startsWith('video/');
+      document.getElementById('modal-port-type').value = isVideo ? 'VIDEO' : 'PHOTO';
+
+      if (!document.getElementById('modal-port-title').value) {
+        document.getElementById('modal-port-title').value = file.name.replace(/\.[^/.]+$/, "");
+      }
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        modalUploadedMediaUrl = e.target.result;
+        document.getElementById('modal-port-url').value = '';
+
+        const previewContainer = document.getElementById('modal-upload-preview');
+        const mediaSlot = document.getElementById('modal-preview-media');
+        document.getElementById('modal-preview-name').innerText = file.name;
+        document.getElementById('modal-preview-size').innerText = `${(file.size / (1024 * 1024)).toFixed(2)} MB • ${isVideo ? 'Video' : 'Photo'}`;
+
+        if (isVideo) {
+          mediaSlot.innerHTML = `<video src="${modalUploadedMediaUrl}" class="w-full h-full object-cover" muted autoplay loop></video>`;
+        } else {
+          mediaSlot.innerHTML = `<img src="${modalUploadedMediaUrl}" class="w-full h-full object-cover">`;
+        }
+        previewContainer.classList.remove('hidden');
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function submitModalGalleryUpload() {
+      const title = document.getElementById('modal-port-title').value.trim();
+      const cat = document.getElementById('modal-port-cat').value;
+      const type = document.getElementById('modal-port-type').value;
+      const urlInput = document.getElementById('modal-port-url').value.trim();
+      const desc = document.getElementById('modal-port-desc').value.trim() || `${cat} moment captured by Smile Studio`;
+
+      const mediaUrl = modalUploadedMediaUrl || urlInput;
+
+      if (!title) {
+        alert("Please enter a title for this photo or video.");
+        return;
+      }
+      if (!mediaUrl) {
+        alert("Please select a photo or video file from your device, or paste a media link.");
+        return;
+      }
+
+      const newItem = {
+        id: "p_" + Date.now(),
+        title: title,
+        cat: cat,
+        type: type,
+        img: mediaUrl,
+        desc: desc
+      };
+
+      portfolioItems.unshift(newItem);
+      saveStoredPortfolio(portfolioItems);
+      renderGallery();
+      renderAdminPortfolio();
+
+      closeGalleryUploadModal();
+      alert(`Success! "${title}" has been uploaded and published to the Smile Studio gallery.`);
+    }
+
+    // Close lightbox or upload modal on Escape key
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        closeLightbox();
+        closeGalleryUploadModal();
+      }
+    });
   </script>
 </body>
 </html>

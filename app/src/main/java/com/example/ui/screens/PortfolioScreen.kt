@@ -25,10 +25,13 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.BookmarkBorder
 import androidx.compose.material.icons.filled.CameraAlt
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.CloudUpload
 import androidx.compose.material.icons.filled.FilterList
+import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Movie
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.PlayCircle
@@ -37,15 +40,20 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -53,6 +61,8 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -67,6 +77,7 @@ import com.example.ui.theme.DarkBorderGold
 import com.example.ui.theme.DarkSurface
 import com.example.ui.theme.DarkSurfaceCard
 import com.example.ui.theme.DarkSurfaceVariant
+import com.example.ui.theme.ErrorRed
 import com.example.ui.theme.GoldContainer
 import com.example.ui.theme.GoldLight
 import com.example.ui.theme.GoldPrimary
@@ -83,6 +94,20 @@ fun PortfolioScreen(
 ) {
     val selectedCategory by viewModel.selectedPortfolioCategory.collectAsState()
     val activePreview by viewModel.activePreviewMedia.collectAsState()
+    val isAdminAuthenticated by viewModel.isAdminAuthenticated.collectAsState()
+
+    var showAddMediaDialog by remember { mutableStateOf(false) }
+    var showAdminPromptDialog by remember { mutableStateOf(false) }
+    var adminPinInput by remember { mutableStateOf("") }
+    var adminPinError by remember { mutableStateOf<String?>(null) }
+
+    val onTriggerUpload = {
+        if (isAdminAuthenticated) {
+            showAddMediaDialog = true
+        } else {
+            showAdminPromptDialog = true
+        }
+    }
 
     val categories = listOf(
         "All",
@@ -102,108 +127,250 @@ fun PortfolioScreen(
         portfolioList.filter { it.category.equals(selectedCategory, ignoreCase = true) }
     }
 
-    Column(
+    Box(
         modifier = modifier
             .fillMaxSize()
             .background(DarkBackground)
             .testTag("portfolio_screen")
     ) {
-        // Header
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 8.dp)
-        ) {
-            SectionHeader(
-                tagline = "Curated Visuals",
-                title = "Portfolio & Films Gallery",
-                description = "Explore genuine masterworks created for clients across India. Tap any asset for cinematic preview."
-            )
-
-            Spacer(modifier = Modifier.height(14.dp))
-
-            // Horizontal Filter Chips
-            LazyRow(
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                contentPadding = PaddingValues(horizontal = 2.dp)
+        Column(modifier = Modifier.fillMaxSize()) {
+            // Header
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 8.dp)
             ) {
-                items(categories) { cat ->
-                    val isSelected = selectedCategory == cat
-                    FilterChip(
-                        selected = isSelected,
-                        onClick = { viewModel.selectPortfolioCategory(cat) },
-                        label = {
-                            Text(
-                                text = cat,
-                                fontSize = 12.sp,
-                                fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal
-                            )
-                        },
-                        colors = FilterChipDefaults.filterChipColors(
-                            selectedContainerColor = GoldPrimary,
-                            selectedLabelColor = Color.Black,
-                            containerColor = DarkSurface,
-                            labelColor = TextSecondary
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Column(modifier = Modifier.weight(1f)) {
+                        SectionHeader(
+                            tagline = "Curated Visuals",
+                            title = "Portfolio & Films Gallery",
+                            description = "Explore genuine masterworks created for clients across India. Tap any asset for cinematic preview."
+                        )
+                    }
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Button(
+                        onClick = onTriggerUpload,
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = GoldPrimary,
+                            contentColor = Color.Black
                         ),
-                        border = FilterChipDefaults.filterChipBorder(
-                            enabled = true,
+                        shape = RoundedCornerShape(10.dp),
+                        contentPadding = PaddingValues(horizontal = 12.dp, vertical = 6.dp),
+                        modifier = Modifier.height(38.dp).testTag("upload_media_header_btn")
+                    ) {
+                        Icon(Icons.Default.CloudUpload, contentDescription = null, modifier = Modifier.size(16.dp))
+                        Spacer(modifier = Modifier.width(4.dp))
+                        Text("Upload", fontWeight = FontWeight.Bold, fontSize = 12.sp)
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(14.dp))
+
+                // Horizontal Filter Chips
+                LazyRow(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    contentPadding = PaddingValues(horizontal = 2.dp)
+                ) {
+                    items(categories) { cat ->
+                        val isSelected = selectedCategory == cat
+                        FilterChip(
                             selected = isSelected,
-                            borderColor = if (isSelected) GoldPrimary else DarkBorder
-                        ),
-                        modifier = Modifier.testTag("filter_chip_$cat")
-                    )
+                            onClick = { viewModel.selectPortfolioCategory(cat) },
+                            label = {
+                                Text(
+                                    text = cat,
+                                    fontSize = 12.sp,
+                                    fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal
+                                )
+                            },
+                            colors = FilterChipDefaults.filterChipColors(
+                                selectedContainerColor = GoldPrimary,
+                                selectedLabelColor = Color.Black,
+                                containerColor = DarkSurface,
+                                labelColor = TextSecondary
+                            ),
+                            border = FilterChipDefaults.filterChipBorder(
+                                enabled = true,
+                                selected = isSelected,
+                                borderColor = if (isSelected) GoldPrimary else DarkBorder
+                            ),
+                            modifier = Modifier.testTag("filter_chip_$cat")
+                        )
+                    }
+                }
+            }
+
+            // Gallery Grid
+            if (filteredList.isEmpty()) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(32.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Icon(
+                            imageVector = Icons.Default.CameraAlt,
+                            contentDescription = null,
+                            tint = DarkBorderGold,
+                            modifier = Modifier.size(56.dp)
+                        )
+                        Spacer(modifier = Modifier.height(12.dp))
+                        Text(
+                            text = "No media in $selectedCategory yet",
+                            color = TextSecondary,
+                            fontSize = 15.sp,
+                            fontWeight = FontWeight.Medium
+                        )
+                        Spacer(modifier = Modifier.height(6.dp))
+                        Text(
+                            text = "Check back soon as our studio uploads new films and photos.",
+                            color = TextSecondary,
+                            fontSize = 12.sp
+                        )
+                        Spacer(modifier = Modifier.height(16.dp))
+                        Button(
+                            onClick = onTriggerUpload,
+                            colors = ButtonDefaults.buttonColors(containerColor = GoldPrimary, contentColor = Color.Black),
+                            shape = RoundedCornerShape(10.dp)
+                        ) {
+                            Icon(Icons.Default.CloudUpload, contentDescription = null, modifier = Modifier.size(16.dp))
+                            Spacer(modifier = Modifier.width(6.dp))
+                            Text("Upload First Item", fontWeight = FontWeight.Bold, fontSize = 12.sp)
+                        }
+                    }
+                }
+            } else {
+                LazyVerticalGrid(
+                    columns = GridCells.Fixed(2),
+                    contentPadding = PaddingValues(start = 14.dp, end = 14.dp, top = 8.dp, bottom = 90.dp),
+                    horizontalArrangement = Arrangement.spacedBy(10.dp),
+                    verticalArrangement = Arrangement.spacedBy(10.dp),
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .testTag("portfolio_grid")
+                ) {
+                    items(filteredList, key = { it.id }) { item ->
+                        PortfolioItemCard(
+                            item = item,
+                            onClick = { viewModel.setPreviewMedia(item) }
+                        )
+                    }
                 }
             }
         }
 
-        // Gallery Grid
-        if (filteredList.isEmpty()) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(32.dp),
-                contentAlignment = Alignment.Center
+        // Floating Action Button for Upload
+        ExtendedFloatingActionButton(
+            onClick = onTriggerUpload,
+            icon = { Icon(Icons.Default.CloudUpload, contentDescription = "Upload Photos & Videos", tint = Color.Black) },
+            text = { Text("Upload Media", color = Color.Black, fontWeight = FontWeight.Bold, fontSize = 13.sp) },
+            containerColor = GoldPrimary,
+            contentColor = Color.Black,
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(bottom = 16.dp, end = 16.dp)
+                .testTag("fab_upload_media")
+        )
+    }
+
+    // Admin Verification Dialog for Uploading
+    if (showAdminPromptDialog) {
+        Dialog(onDismissRequest = {
+            showAdminPromptDialog = false
+            adminPinInput = ""
+            adminPinError = null
+        }) {
+            Surface(
+                shape = RoundedCornerShape(16.dp),
+                color = DarkSurface,
+                border = androidx.compose.foundation.BorderStroke(1.dp, DarkBorderGold),
+                modifier = Modifier.fillMaxWidth()
             ) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Icon(
-                        imageVector = Icons.Default.CameraAlt,
-                        contentDescription = null,
-                        tint = DarkBorderGold,
-                        modifier = Modifier.size(56.dp)
-                    )
+                Column(
+                    modifier = Modifier.padding(20.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .size(48.dp)
+                            .clip(CircleShape)
+                            .background(GoldContainer),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(Icons.Default.Lock, contentDescription = null, tint = GoldLight)
+                    }
                     Spacer(modifier = Modifier.height(12.dp))
+                    Text("Studio Admin Verification", fontWeight = FontWeight.Bold, fontSize = 16.sp, color = TextPrimary)
                     Text(
-                        text = "No media in $selectedCategory yet",
+                        text = "Enter administrator password to upload photos and videos to the public gallery",
+                        fontSize = 11.sp,
                         color = TextSecondary,
-                        fontSize = 15.sp,
-                        fontWeight = FontWeight.Medium
+                        textAlign = TextAlign.Center
                     )
-                    Spacer(modifier = Modifier.height(6.dp))
-                    Text(
-                        text = "Check back soon as our studio uploads new films and photos.",
-                        color = TextSecondary,
-                        fontSize = 12.sp
+                    Spacer(modifier = Modifier.height(16.dp))
+                    if (adminPinError != null) {
+                        Text(adminPinError ?: "", color = ErrorRed, fontSize = 11.sp)
+                        Spacer(modifier = Modifier.height(6.dp))
+                    }
+                    OutlinedTextField(
+                        value = adminPinInput,
+                        onValueChange = { adminPinInput = it },
+                        placeholder = { Text("Enter Password", color = TextSecondary) },
+                        visualTransformation = PasswordVisualTransformation(),
+                        singleLine = true,
+                        modifier = Modifier.fillMaxWidth().testTag("gallery_admin_pin_input")
                     )
-                }
-            }
-        } else {
-            LazyVerticalGrid(
-                columns = GridCells.Fixed(2),
-                contentPadding = PaddingValues(start = 14.dp, end = 14.dp, top = 8.dp, bottom = 90.dp),
-                horizontalArrangement = Arrangement.spacedBy(10.dp),
-                verticalArrangement = Arrangement.spacedBy(10.dp),
-                modifier = Modifier
-                    .fillMaxSize()
-                    .testTag("portfolio_grid")
-            ) {
-                items(filteredList, key = { it.id }) { item ->
-                    PortfolioItemCard(
-                        item = item,
-                        onClick = { viewModel.setPreviewMedia(item) }
-                    )
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        Button(
+                            onClick = {
+                                showAdminPromptDialog = false
+                                adminPinInput = ""
+                                adminPinError = null
+                            },
+                            colors = ButtonDefaults.buttonColors(containerColor = DarkSurfaceVariant, contentColor = TextPrimary),
+                            modifier = Modifier.weight(1f)
+                        ) {
+                            Text("Cancel")
+                        }
+                        Button(
+                            onClick = {
+                                if (adminPinInput.trim() == "9741") {
+                                    viewModel.authenticateAdmin("9741")
+                                    showAdminPromptDialog = false
+                                    adminPinInput = ""
+                                    adminPinError = null
+                                    showAddMediaDialog = true
+                                } else {
+                                    adminPinError = "Incorrect password. Please try again."
+                                }
+                            },
+                            colors = ButtonDefaults.buttonColors(containerColor = GoldPrimary, contentColor = Color.Black),
+                            modifier = Modifier.weight(1f).testTag("gallery_verify_pin_btn")
+                        ) {
+                            Text("Unlock & Upload", fontWeight = FontWeight.Bold)
+                        }
+                    }
                 }
             }
         }
+    }
+
+    // Add Media Dialog
+    if (showAddMediaDialog) {
+        AddMediaDialog(
+            onDismiss = { showAddMediaDialog = false },
+            onAdd = { title, cat, type, url, vidUrl, caption, duration, isFeatured ->
+                viewModel.addPortfolioMedia(title, cat, type, url, vidUrl, caption, duration, isFeatured)
+                showAddMediaDialog = false
+            }
+        )
     }
 
     // Full Screen Preview Dialog

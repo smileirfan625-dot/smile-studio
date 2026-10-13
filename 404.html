@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smile Studio — Redirecting...</title>
+  <script>
+    // GitHub Pages 404 redirect handler
+    (function() {
+      var pathname = window.location.pathname;
+      var segments = pathname.split('/').filter(Boolean);
+      var origin = window.location.origin;
+
+      if (window.location.hostname.endsWith('github.io') && segments.length > 0) {
+        var repoName = segments[0];
+        window.location.replace(origin + '/' + repoName + '/index.html' + window.location.hash);
+      } else {
+        window.location.replace(origin + '/index.html' + window.location.hash);
+      }
+    })();
+  </script>
+</head>
+<body style="background-color: #0D0D11; color: #D4AF37; font-family: sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; text-align: center;">
+  <div>
+    <h1 style="font-size: 26px; margin-bottom: 8px; font-weight: bold;">Smile Studio</h1>
+    <p style="color: #9CA3AF; font-size: 14px;">Loading studio experience...</p>
+    <a href="./index.html" style="color: #D4AF37; text-decoration: underline; font-size: 13px;">Click here if not redirected automatically</a>
+  </div>
+</body>
+</html>
