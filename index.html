@@ -1,0 +1,1712 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smile Studio — Photography & Videography</title>
+  <meta name="description" content="Every Smile Tells a Story. Capturing your most beautiful moments with creativity, emotion, and cinematic storytelling.">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='48' fill='%230D0D11'/><circle cx='50' cy='50' r='30' fill='none' stroke='%23D4AF37' stroke-width='4'/><path d='M35 68 Q50 82 65 68' fill='none' stroke='%23D4AF37' stroke-width='4' stroke-linecap='round'/></svg>">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            studio: {
+              black: '#0D0D11',
+              surface: '#14141A',
+              card: '#1A1A22',
+              border: '#2C2C38',
+              gold: '#D4AF37',
+              goldLight: '#F3C853',
+              goldDark: '#AA820A',
+              goldBg: '#2A2312'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { background-color: #0D0D11; color: #F6F6F9; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    .gold-gradient { background: linear-gradient(135deg, #F3C853 0%, #D4AF37 50%, #AA820A 100%); }
+    .gold-text { background: linear-gradient(135deg, #FFF0B3 0%, #D4AF37 50%, #AA820A 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .gold-border-glow { border: 1px solid rgba(212, 175, 55, 0.4); box-shadow: 0 0 15px rgba(212, 175, 55, 0.1); }
+    .custom-scroll::-webkit-scrollbar { width: 6px; height: 6px; }
+    .custom-scroll::-webkit-scrollbar-track { background: #14141A; }
+    .custom-scroll::-webkit-scrollbar-thumb { background: #2C2C38; border-radius: 3px; }
+    .custom-scroll::-webkit-scrollbar-thumb:hover { background: #D4AF37; }
+  </style>
+</head>
+<body class="bg-studio-black text-gray-100 min-h-screen flex flex-col">
+
+  <!-- TOP NAVIGATION BAR -->
+  <header class="sticky top-0 z-50 bg-[#0D0D11]/90 backdrop-blur-md border-b border-studio-border">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <!-- Brand Logo -->
+      <a href="#home" onclick="showPage('home')" class="flex items-center gap-3 group">
+        <div class="w-10 h-10 rounded-full gold-gradient flex items-center justify-center text-black font-bold shadow-md shadow-amber-500/10">
+          <i class="fa-solid fa-camera text-base"></i>
+        </div>
+        <div>
+          <span class="text-lg font-extrabold tracking-wider gold-text block leading-none">SMILE STUDIO</span>
+          <span class="text-[10px] text-gray-400 tracking-widest uppercase">Cinematic & Photography</span>
+        </div>
+      </a>
+
+      <!-- Desktop Nav Links -->
+      <nav class="hidden md:flex items-center gap-6 text-sm font-medium">
+        <button onclick="showPage('home')" class="hover:text-studio-gold transition-colors py-1">Home</button>
+        <button onclick="showPage('services')" class="hover:text-studio-gold transition-colors py-1">Services</button>
+        <button onclick="showPage('portfolio')" class="hover:text-studio-gold transition-colors py-1">Gallery</button>
+        <button onclick="showPage('packages')" class="hover:text-studio-gold transition-colors py-1">Packages</button>
+        <button onclick="showPage('contact')" class="hover:text-studio-gold transition-colors py-1">Contact</button>
+        <button onclick="showPage('lookup')" class="text-xs bg-studio-surface px-3 py-1.5 rounded-full border border-studio-border hover:border-studio-gold text-gray-300 hover:text-white flex items-center gap-1.5">
+          <i class="fa-solid fa-magnifying-glass text-studio-gold text-xs"></i> Track Booking
+        </button>
+      </nav>
+
+      <!-- Right CTAs -->
+      <div class="flex items-center gap-3">
+        <button onclick="showPage('admin')" title="Admin Dashboard" class="w-9 h-9 rounded-full bg-studio-surface border border-studio-border hover:border-studio-gold flex items-center justify-center text-gray-300 hover:text-studio-gold transition-colors relative">
+          <i class="fa-solid fa-shield-halved text-sm"></i>
+          <span id="nav-unread-badge" class="hidden absolute -top-1 -right-1 bg-studio-gold text-black text-[9px] font-bold px-1.5 py-0.5 rounded-full"></span>
+        </button>
+        <button onclick="startBooking()" class="gold-gradient text-black font-bold px-4 py-2 rounded-full text-xs md:text-sm hover:brightness-110 shadow-lg shadow-amber-500/20 transition-all flex items-center gap-1.5">
+          <i class="fa-solid fa-calendar-check"></i> Book Now
+        </button>
+        <!-- Mobile Menu Toggle -->
+        <button onclick="toggleMobileMenu()" class="md:hidden text-gray-300 hover:text-white p-2">
+          <i class="fa-solid fa-bars text-lg"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Navigation Dropdown -->
+    <div id="mobile-menu" class="hidden md:hidden bg-studio-surface border-b border-studio-border px-4 py-4 space-y-3 text-sm">
+      <button onclick="showPage('home'); toggleMobileMenu()" class="block w-full text-left py-2 hover:text-studio-gold">Home</button>
+      <button onclick="showPage('services'); toggleMobileMenu()" class="block w-full text-left py-2 hover:text-studio-gold">Services (17 Categories)</button>
+      <button onclick="showPage('portfolio'); toggleMobileMenu()" class="block w-full text-left py-2 hover:text-studio-gold">Portfolio Gallery</button>
+      <button onclick="showPage('packages'); toggleMobileMenu()" class="block w-full text-left py-2 hover:text-studio-gold">Packages & Pricing</button>
+      <button onclick="showPage('contact'); toggleMobileMenu()" class="block w-full text-left py-2 hover:text-studio-gold">Contact & FAQs</button>
+      <button onclick="showPage('lookup'); toggleMobileMenu()" class="block w-full text-left py-2 text-studio-gold"><i class="fa-solid fa-magnifying-glass mr-2"></i>Track Booking Status</button>
+      <button onclick="showPage('admin'); toggleMobileMenu()" class="block w-full text-left py-2 text-gray-400"><i class="fa-solid fa-shield-halved mr-2"></i>Admin Portal</button>
+    </div>
+  </header>
+
+  <!-- MAIN CONTAINER WITH DYNAMIC PAGES -->
+  <main class="flex-grow">
+
+    <!-- PAGE 1: HOME -->
+    <section id="page-home" class="page-section">
+      <!-- Cinematic Hero -->
+      <div class="relative min-h-[560px] md:min-h-[640px] flex items-center justify-center overflow-hidden">
+        <img src="https://images.unsplash.com/photo-1519741497674-611481863552?w=1600&auto=format&fit=crop" alt="Smile Studio Hero" class="absolute inset-0 w-full h-full object-cover">
+        <div class="absolute inset-0 bg-gradient-to-t from-studio-black via-studio-black/80 to-black/50"></div>
+        <div class="relative z-10 max-w-4xl mx-auto px-4 text-center py-16">
+          <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-studio-goldBg/90 border border-studio-gold text-studio-goldLight text-xs font-semibold tracking-wider uppercase mb-6 shadow-md">
+            <i class="fa-solid fa-gem"></i> Premium Photography & Cinematic Films
+          </div>
+          <h1 class="text-4xl md:text-6xl font-black tracking-tight mb-4 text-white leading-tight">
+            Every Smile Tells <span class="gold-text">a Story.</span>
+          </h1>
+          <p class="text-base md:text-xl text-gray-300 max-w-2xl mx-auto mb-8 font-light leading-relaxed">
+            Capturing your most beautiful moments with creativity, emotion, and cinematic storytelling.
+          </p>
+          <div class="flex flex-wrap items-center justify-center gap-4">
+            <button onclick="startBooking()" class="gold-gradient text-black font-bold px-7 py-3.5 rounded-xl shadow-lg shadow-amber-500/20 hover:scale-105 transition-all flex items-center gap-2">
+              <i class="fa-solid fa-calendar-plus"></i> Book Your Event
+            </button>
+            <button onclick="showPage('portfolio')" class="bg-studio-surface/80 hover:bg-studio-surface border border-studio-gold/60 text-studio-goldLight font-semibold px-6 py-3.5 rounded-xl transition-all">
+              Explore Our Work
+            </button>
+            <button onclick="showPage('packages')" class="bg-studio-card/80 hover:bg-studio-card border border-studio-border text-gray-200 font-semibold px-6 py-3.5 rounded-xl transition-all">
+              View Packages
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Trust Indicators -->
+      <div class="max-w-6xl mx-auto px-4 -mt-10 relative z-20">
+        <div class="bg-studio-surface border border-studio-border rounded-2xl p-6 shadow-2xl grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+          <div>
+            <div class="text-2xl md:text-3xl font-extrabold text-studio-gold">500+</div>
+            <div class="text-xs text-gray-400 mt-1">Weddings & Shoots</div>
+          </div>
+          <div>
+            <div class="text-2xl md:text-3xl font-extrabold text-studio-gold">4K HDR</div>
+            <div class="text-xs text-gray-400 mt-1">Cinema Standard Films</div>
+          </div>
+          <div>
+            <div class="text-2xl md:text-3xl font-extrabold text-studio-gold">4.9 ★</div>
+            <div class="text-xs text-gray-400 mt-1">Verified Client Reviews</div>
+          </div>
+          <div>
+            <div class="text-2xl md:text-3xl font-extrabold text-studio-gold">17+</div>
+            <div class="text-xs text-gray-400 mt-1">Event Categories</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Popular Categories Grid -->
+      <div class="max-w-7xl mx-auto px-4 py-20">
+        <div class="flex flex-col md:flex-row md:items-end justify-between mb-10">
+          <div>
+            <span class="text-xs font-bold text-studio-gold tracking-widest uppercase">Our Specializations</span>
+            <h2 class="text-3xl font-bold text-white mt-1">Featured Event Coverage</h2>
+          </div>
+          <button onclick="showPage('services')" class="text-studio-gold hover:underline text-sm font-semibold mt-3 md:mt-0 flex items-center gap-1.5">
+            Browse All 17 Categories <i class="fa-solid fa-arrow-right text-xs"></i>
+          </button>
+        </div>
+        <div id="home-featured-categories" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
+      </div>
+
+      <!-- Featured Packages Preview -->
+      <div class="bg-studio-surface py-20 border-y border-studio-border">
+        <div class="max-w-7xl mx-auto px-4">
+          <div class="text-center max-w-2xl mx-auto mb-12">
+            <span class="text-xs font-bold text-studio-gold tracking-widest uppercase">Investment & Value</span>
+            <h2 class="text-3xl font-bold text-white mt-1">Studio Packages & Pricing</h2>
+            <p class="text-sm text-gray-400 mt-2">Transparent packages in Indian Rupees (INR) crafted for weddings, shoots, and milestone celebrations.</p>
+          </div>
+          <div id="home-featured-packages" class="grid grid-cols-1 md:grid-cols-3 gap-8"></div>
+        </div>
+      </div>
+
+      <!-- Testimonials -->
+      <div class="max-w-7xl mx-auto px-4 py-20">
+        <div class="text-center max-w-xl mx-auto mb-12">
+          <span class="text-xs font-bold text-studio-gold tracking-widest uppercase">Testimonials</span>
+          <h2 class="text-3xl font-bold text-white mt-1">What Couples & Clients Say</h2>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="bg-studio-surface border border-studio-border p-6 rounded-2xl flex flex-col justify-between">
+            <div>
+              <div class="text-studio-gold mb-3 text-sm">★★★★★</div>
+              <p class="text-gray-300 text-sm leading-relaxed italic">“Smile Studio made our wedding look like a royal fairy tale film. The team was unobtrusive yet captured every tender emotion and laugh. The album quality is breathtaking!”</p>
+            </div>
+            <div class="mt-6 pt-4 border-t border-studio-border">
+              <div class="font-bold text-studio-goldLight text-sm">Rohit & Priya Sharma</div>
+              <div class="text-xs text-gray-500">Grand Royal Wedding • Sep 2026</div>
+            </div>
+          </div>
+          <div class="bg-studio-surface border border-studio-border p-6 rounded-2xl flex flex-col justify-between">
+            <div>
+              <div class="text-studio-gold mb-3 text-sm">★★★★★</div>
+              <p class="text-gray-300 text-sm leading-relaxed italic">“From location styling to drone aerials, Irfan and the Smile Studio crew went beyond our wildest expectations. Their creative angles and warm approach made us feel so comfortable.”</p>
+            </div>
+            <div class="mt-6 pt-4 border-t border-studio-border">
+              <div class="font-bold text-studio-goldLight text-sm">Ananya Hegde</div>
+              <div class="text-xs text-gray-500">Pre-Wedding & Engagement • Aug 2026</div>
+            </div>
+          </div>
+          <div class="bg-studio-surface border border-studio-border p-6 rounded-2xl flex flex-col justify-between">
+            <div>
+              <div class="text-studio-gold mb-3 text-sm">★★★★★</div>
+              <p class="text-gray-300 text-sm leading-relaxed italic">“Top tier professionalism! Delivered 600 edited executive photographs and an engaging 4K teaser reel within 4 days. Absolutely reliable studio partners.”</p>
+            </div>
+            <div class="mt-6 pt-4 border-t border-studio-border">
+              <div class="font-bold text-studio-goldLight text-sm">Vikram Menon</div>
+              <div class="text-xs text-gray-500">Corporate Brand Gala • Jul 2026</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Final Call to Action -->
+      <div class="max-w-5xl mx-auto px-4 pb-20">
+        <div class="gold-border-glow bg-gradient-to-r from-studio-goldBg to-studio-surface rounded-3xl p-8 md:p-12 text-center">
+          <span class="text-xs font-bold text-studio-gold uppercase tracking-widest">Reserve Your Date</span>
+          <h2 class="text-2xl md:text-4xl font-extrabold text-white mt-2 mb-3">Dates for 2026 Season Are Filling Fast</h2>
+          <p class="text-gray-300 text-sm md:text-base max-w-xl mx-auto mb-6">Check our live availability calendar, select your package, and receive your booking reference instantly.</p>
+          <div class="flex flex-wrap justify-center gap-4">
+            <button onclick="startBooking()" class="gold-gradient text-black font-bold px-8 py-3.5 rounded-xl shadow-lg hover:scale-105 transition-all">
+              Book Event Online
+            </button>
+            <a href="https://wa.me/919113272998?text=Hello%20Smile%20Studio,%20I%20would%20like%20to%20enquire%20about%20event%20booking" target="_blank" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-6 py-3.5 rounded-xl transition-all flex items-center gap-2">
+              <i class="fa-brands fa-whatsapp text-lg"></i> WhatsApp Direct
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PAGE 2: SERVICES (ALL 17 CATEGORIES) -->
+    <section id="page-services" class="page-section hidden max-w-7xl mx-auto px-4 py-12">
+      <div class="max-w-2xl mb-8">
+        <span class="text-xs font-bold text-studio-gold tracking-widest uppercase">Comprehensive Coverage</span>
+        <h1 class="text-3xl font-extrabold text-white mt-1">Services & 17 Event Categories</h1>
+        <p class="text-gray-400 text-sm mt-2">Explore our full repertoire of photography and videography services. Tap any event to begin booking.</p>
+      </div>
+
+      <!-- Search Input -->
+      <div class="mb-8">
+        <div class="relative max-w-md">
+          <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3.5 text-gray-500"></i>
+          <input type="text" id="service-search-input" onkeyup="filterServices()" placeholder="Search wedding, birthday, maternity, corporate..." class="w-full bg-studio-surface border border-studio-border rounded-xl pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:border-studio-gold">
+        </div>
+      </div>
+
+      <!-- Categories Container -->
+      <div id="services-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+    </section>
+
+    <!-- PAGE 3: PORTFOLIO GALLERY -->
+    <section id="page-portfolio" class="page-section hidden max-w-7xl mx-auto px-4 py-12">
+      <div class="flex flex-col md:flex-row md:items-end justify-between mb-8">
+        <div>
+          <span class="text-xs font-bold text-studio-gold tracking-widest uppercase">Master Works</span>
+          <h1 class="text-3xl font-extrabold text-white mt-1">Portfolio & Films Gallery</h1>
+          <p class="text-gray-400 text-sm mt-1">Genuine captures and cinematic highlights produced by Smile Studio.</p>
+        </div>
+      </div>
+
+      <!-- Filter Buttons -->
+      <div class="flex flex-wrap gap-2 mb-8 overflow-x-auto pb-2 custom-scroll" id="gallery-filters">
+        <button onclick="filterGallery('All')" class="gallery-filter-btn active px-4 py-1.5 rounded-full text-xs font-semibold bg-studio-gold text-black transition-all">All</button>
+        <button onclick="filterGallery('Wedding')" class="gallery-filter-btn px-4 py-1.5 rounded-full text-xs font-semibold bg-studio-surface border border-studio-border text-gray-300 hover:text-white transition-all">Weddings</button>
+        <button onclick="filterGallery('Pre-Wedding')" class="gallery-filter-btn px-4 py-1.5 rounded-full text-xs font-semibold bg-studio-surface border border-studio-border text-gray-300 hover:text-white transition-all">Pre-Wedding</button>
+        <button onclick="filterGallery('Portraits')" class="gallery-filter-btn px-4 py-1.5 rounded-full text-xs font-semibold bg-studio-surface border border-studio-border text-gray-300 hover:text-white transition-all">Portraits</button>
+        <button onclick="filterGallery('Family')" class="gallery-filter-btn px-4 py-1.5 rounded-full text-xs font-semibold bg-studio-surface border border-studio-border text-gray-300 hover:text-white transition-all">Family</button>
+        <button onclick="filterGallery('Birthday')" class="gallery-filter-btn px-4 py-1.5 rounded-full text-xs font-semibold bg-studio-surface border border-studio-border text-gray-300 hover:text-white transition-all">Birthday</button>
+        <button onclick="filterGallery('Cinematic Video')" class="gallery-filter-btn px-4 py-1.5 rounded-full text-xs font-semibold bg-studio-surface border border-studio-border text-gray-300 hover:text-white transition-all">Cinematic Films</button>
+        <button onclick="filterGallery('Reels')" class="gallery-filter-btn px-4 py-1.5 rounded-full text-xs font-semibold bg-studio-surface border border-studio-border text-gray-300 hover:text-white transition-all">Reels & Shorts</button>
+        <button onclick="filterGallery('Events')" class="gallery-filter-btn px-4 py-1.5 rounded-full text-xs font-semibold bg-studio-surface border border-studio-border text-gray-300 hover:text-white transition-all">Events</button>
+      </div>
+
+      <!-- Gallery Grid -->
+      <div id="gallery-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"></div>
+    </section>
+
+    <!-- PAGE 4: PACKAGES & PRICING -->
+    <section id="page-packages" class="page-section hidden max-w-7xl mx-auto px-4 py-12">
+      <div class="text-center max-w-2xl mx-auto mb-12">
+        <span class="text-xs font-bold text-studio-gold tracking-widest uppercase">Transparent Pricing</span>
+        <h1 class="text-3xl font-extrabold text-white mt-1">Packages & Production Scope</h1>
+        <p class="text-gray-400 text-sm mt-2">All prices in Indian Rupees (INR). Can be customized with optional drone, album, and cinematic add-ons.</p>
+      </div>
+
+      <div id="packages-grid" class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16"></div>
+
+      <!-- Add-ons Catalog -->
+      <div class="bg-studio-surface border border-studio-border rounded-2xl p-6 md:p-8 max-w-4xl mx-auto">
+        <h2 class="text-lg font-bold text-studio-gold mb-1">Optional Production Add-Ons</h2>
+        <p class="text-xs text-gray-400 mb-6">Pair any of these custom upgrades with your selected package during booking.</p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="bg-studio-card p-4 rounded-xl border border-studio-border flex justify-between items-center">
+            <div>
+              <div class="text-sm font-bold text-white">4K Drone Aerial Cinematography</div>
+              <div class="text-xs text-gray-400">Licensed pilot with venue & couple flyovers</div>
+            </div>
+            <div class="text-studio-gold font-extrabold text-sm whitespace-nowrap ml-3">₹12,000</div>
+          </div>
+          <div class="bg-studio-card p-4 rounded-xl border border-studio-border flex justify-between items-center">
+            <div>
+              <div class="text-sm font-bold text-white">Luxury Flush-Mount Album (40 Pages)</div>
+              <div class="text-xs text-gray-400">Leather/Velvet keepsake box + art paper</div>
+            </div>
+            <div class="text-studio-gold font-extrabold text-sm whitespace-nowrap ml-3">₹15,000</div>
+          </div>
+          <div class="bg-studio-card p-4 rounded-xl border border-studio-border flex justify-between items-center">
+            <div>
+              <div class="text-sm font-bold text-white">Raw Footage Archive SSD (1TB)</div>
+              <div class="text-xs text-gray-400">All uncut 4K video clips & RAW stills</div>
+            </div>
+            <div class="text-studio-gold font-extrabold text-sm whitespace-nowrap ml-3">₹8,000</div>
+          </div>
+          <div class="bg-studio-card p-4 rounded-xl border border-studio-border flex justify-between items-center">
+            <div>
+              <div class="text-sm font-bold text-white">4K Multi-Camera Live Streaming</div>
+              <div class="text-xs text-gray-400">Private broadcast link for global guests</div>
+            </div>
+            <div class="text-studio-gold font-extrabold text-sm whitespace-nowrap ml-3">₹10,000</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PAGE 5: COMPLETE MULTI-STEP BOOKING WIZARD -->
+    <section id="page-booking" class="page-section hidden max-w-3xl mx-auto px-4 py-12">
+      <!-- Wizard Step Indicator -->
+      <div class="mb-8">
+        <div class="flex items-center justify-between text-xs font-bold text-gray-400 mb-2">
+          <span id="booking-step-label" class="text-studio-gold">STEP 1 OF 7: SELECT EVENT</span>
+          <span id="booking-step-name" class="text-white">Event Category</span>
+        </div>
+        <div class="grid grid-cols-7 gap-1 h-2 bg-studio-surface rounded-full overflow-hidden" id="booking-progress-bars">
+          <div class="bg-studio-gold rounded-full h-full"></div>
+          <div class="bg-studio-border rounded-full h-full"></div>
+          <div class="bg-studio-border rounded-full h-full"></div>
+          <div class="bg-studio-border rounded-full h-full"></div>
+          <div class="bg-studio-border rounded-full h-full"></div>
+          <div class="bg-studio-border rounded-full h-full"></div>
+          <div class="bg-studio-border rounded-full h-full"></div>
+        </div>
+      </div>
+
+      <!-- Booking Card Container -->
+      <div class="bg-studio-surface border border-studio-border rounded-2xl p-6 md:p-8 shadow-2xl relative">
+        <div id="booking-step-container"></div>
+      </div>
+    </section>
+
+    <!-- PAGE 6: TRACK BOOKING STATUS (LOOKUP) -->
+    <section id="page-lookup" class="page-section hidden max-w-xl mx-auto px-4 py-12">
+      <div class="text-center mb-8">
+        <span class="text-xs font-bold text-studio-gold tracking-widest uppercase">Self-Service Portal</span>
+        <h1 class="text-2xl md:text-3xl font-extrabold text-white mt-1">Track Your Booking Status</h1>
+        <p class="text-gray-400 text-xs md:text-sm mt-1">Enter your unique reference number (e.g., SS-2026-4821).</p>
+      </div>
+
+      <div class="bg-studio-surface border border-studio-border rounded-2xl p-6 mb-8">
+        <label class="block text-xs font-semibold text-gray-300 mb-2">Booking Reference ID</label>
+        <div class="flex gap-2">
+          <input type="text" id="lookup-input" placeholder="e.g. SS-2026-4821" class="flex-grow bg-studio-card border border-studio-border rounded-xl px-4 py-2.5 text-sm uppercase focus:outline-none focus:border-studio-gold">
+          <button onclick="performBookingLookup()" class="gold-gradient text-black font-bold px-5 py-2.5 rounded-xl text-sm hover:brightness-110">
+            Check
+          </button>
+        </div>
+        <div id="lookup-error" class="hidden text-xs text-rose-400 mt-2"></div>
+      </div>
+
+      <div id="lookup-result-card" class="hidden bg-studio-surface gold-border-glow rounded-2xl p-6"></div>
+    </section>
+
+    <!-- PAGE 7: CONTACT & FAQS -->
+    <section id="page-contact" class="page-section hidden max-w-7xl mx-auto px-4 py-12">
+      <div class="max-w-2xl mb-10">
+        <span class="text-xs font-bold text-studio-gold tracking-widest uppercase">Get in Touch</span>
+        <h1 class="text-3xl font-extrabold text-white mt-1">Contact Smile Studio</h1>
+        <p class="text-gray-400 text-sm mt-1">Connect with Irfan and our lead production team via WhatsApp, phone, or online enquiry.</p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
+        <!-- Contact Cards -->
+        <div class="space-y-4">
+          <a href="https://wa.me/919113272998?text=Hello%20Smile%20Studio!%20I%20would%20like%20to%20get%20in%20touch." target="_blank" class="block bg-studio-surface border border-emerald-500/30 hover:border-emerald-500 p-5 rounded-2xl transition-all group">
+            <div class="flex items-center gap-4">
+              <div class="w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-xl">
+                <i class="fa-brands fa-whatsapp"></i>
+              </div>
+              <div>
+                <div class="text-sm font-bold text-white group-hover:text-emerald-400">WhatsApp Studio</div>
+                <div class="text-xs text-emerald-400 font-semibold">+91 9113272998</div>
+              </div>
+            </div>
+          </a>
+
+          <a href="tel:9113272998" class="block bg-studio-surface border border-studio-border hover:border-studio-gold p-5 rounded-2xl transition-all group">
+            <div class="flex items-center gap-4">
+              <div class="w-12 h-12 rounded-full bg-studio-goldBg text-studio-gold flex items-center justify-center text-lg">
+                <i class="fa-solid fa-phone"></i>
+              </div>
+              <div>
+                <div class="text-sm font-bold text-white group-hover:text-studio-gold">Direct Studio Line</div>
+                <div class="text-xs text-studio-goldLight font-semibold">9113272998</div>
+              </div>
+            </div>
+          </a>
+
+          <a href="mailto:smileirfan625@gmail.com" class="block bg-studio-surface border border-studio-border hover:border-studio-gold p-5 rounded-2xl transition-all group">
+            <div class="flex items-center gap-4">
+              <div class="w-12 h-12 rounded-full bg-studio-card text-gray-300 flex items-center justify-center text-lg">
+                <i class="fa-solid fa-envelope"></i>
+              </div>
+              <div>
+                <div class="text-sm font-bold text-white group-hover:text-studio-gold">Official Email</div>
+                <div class="text-xs text-gray-400">smileirfan625@gmail.com</div>
+              </div>
+            </div>
+          </a>
+
+          <div class="bg-studio-surface border border-studio-border p-5 rounded-2xl text-xs space-y-2 text-gray-400">
+            <div><strong class="text-white">Studio Location:</strong> Bengaluru & Worldwide Coverage</div>
+            <div><strong class="text-white">Operating Hours:</strong> Mon - Sun: 9:00 AM - 9:00 PM (By Appointment)</div>
+          </div>
+        </div>
+
+        <!-- Contact Enquiry Form -->
+        <div class="lg:col-span-2 bg-studio-surface border border-studio-border rounded-2xl p-6 md:p-8">
+          <h2 class="text-xl font-bold text-white mb-1">Customer Enquiry Desk</h2>
+          <p class="text-xs text-gray-400 mb-6">Send custom requirements, date checks, or quotation queries directly to studio management.</p>
+          <form id="enquiry-form" onsubmit="handleEnquirySubmit(event)" class="space-y-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-semibold text-gray-300 mb-1">Full Name*</label>
+                <input type="text" id="enq-name" required placeholder="e.g. Irfan / Priya" class="w-full bg-studio-card border border-studio-border rounded-xl px-4 py-2 text-sm focus:outline-none focus:border-studio-gold">
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-gray-300 mb-1">Contact Phone*</label>
+                <input type="tel" id="enq-phone" required placeholder="e.g. 9113272998" class="w-full bg-studio-card border border-studio-border rounded-xl px-4 py-2 text-sm focus:outline-none focus:border-studio-gold">
+              </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-semibold text-gray-300 mb-1">Email Address*</label>
+                <input type="email" id="enq-email" required placeholder="name@domain.com" class="w-full bg-studio-card border border-studio-border rounded-xl px-4 py-2 text-sm focus:outline-none focus:border-studio-gold">
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-gray-300 mb-1">Enquiry Type</label>
+                <select id="enq-type" class="w-full bg-studio-card border border-studio-border rounded-xl px-4 py-2 text-sm focus:outline-none focus:border-studio-gold">
+                  <option>General Enquiry</option>
+                  <option>Package questions</option>
+                  <option>Price quotation requests</option>
+                  <option>Booking-related questions</option>
+                  <option>Reschedule requests</option>
+                  <option>Cancellation requests</option>
+                  <option>Custom photography requirements</option>
+                </select>
+              </div>
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-gray-300 mb-1">Associated Booking Reference (Optional)</label>
+              <input type="text" id="enq-ref" placeholder="e.g. SS-2026-4821" class="w-full bg-studio-card border border-studio-border rounded-xl px-4 py-2 text-sm focus:outline-none focus:border-studio-gold uppercase">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-gray-300 mb-1">Message / Requirements*</label>
+              <textarea id="enq-message" required rows="4" placeholder="Tell us about your event vision, dates, or specific questions..." class="w-full bg-studio-card border border-studio-border rounded-xl px-4 py-2 text-sm focus:outline-none focus:border-studio-gold"></textarea>
+            </div>
+            <button type="submit" class="gold-gradient text-black font-bold px-6 py-2.5 rounded-xl text-sm hover:brightness-110 flex items-center gap-2">
+              <i class="fa-solid fa-paper-plane"></i> Send Message to Studio
+            </button>
+            <div id="enquiry-success" class="hidden text-xs text-emerald-400 bg-emerald-950/40 p-3 rounded-xl border border-emerald-800">
+              Thank you! Your enquiry has been received and saved. Our studio director will contact you shortly.
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- FAQ Section -->
+      <div class="max-w-3xl mx-auto">
+        <h2 class="text-2xl font-bold text-white mb-6 text-center">Frequently Asked Questions</h2>
+        <div class="space-y-3" id="faq-container"></div>
+      </div>
+    </section>
+
+    <!-- PAGE 8: SECURE ADMIN DASHBOARD (PERMANENT PASSWORD: 9741) -->
+    <section id="page-admin" class="page-section hidden max-w-7xl mx-auto px-4 py-12">
+      <!-- Admin Login Gate -->
+      <div id="admin-login-gate" class="max-w-md mx-auto bg-studio-surface border border-studio-border gold-border-glow rounded-3xl p-8 text-center">
+        <div class="w-14 h-14 rounded-full bg-studio-goldBg border border-studio-gold flex items-center justify-center text-studio-gold text-2xl mx-auto mb-4">
+          <i class="fa-solid fa-lock"></i>
+        </div>
+        <h1 class="text-xl font-bold text-white">Studio Management Portal</h1>
+        <p class="text-xs text-gray-400 mt-1 mb-6">Enter the permanent administrator password to access bookings, revenue, and content management.</p>
+        <form onsubmit="handleAdminLogin(event)" class="space-y-4">
+          <div>
+            <input type="password" id="admin-password-input" required placeholder="Enter Admin Password" class="w-full bg-studio-card border border-studio-border rounded-xl px-4 py-2.5 text-center text-sm tracking-widest focus:outline-none focus:border-studio-gold">
+            <div id="admin-login-error" class="hidden text-xs text-rose-400 mt-2">Invalid Studio Administrator Password. Please try again.</div>
+          </div>
+          <button type="submit" class="w-full gold-gradient text-black font-bold py-2.5 rounded-xl text-sm hover:brightness-110">
+            Unlock Dashboard
+          </button>
+        </form>
+      </div>
+
+      <!-- Authenticated Admin Content -->
+      <div id="admin-dashboard-content" class="hidden space-y-8">
+        <!-- Top Controls -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-studio-border">
+          <div>
+            <span class="text-xs font-bold text-studio-gold tracking-widest uppercase">Admin Authority</span>
+            <h1 class="text-2xl font-bold text-white">Smile Studio Control Center</h1>
+          </div>
+          <button onclick="handleAdminLogout()" class="bg-studio-surface hover:bg-studio-card border border-studio-border text-xs px-4 py-2 rounded-xl text-gray-300">
+            <i class="fa-solid fa-lock mr-1.5"></i> Lock Portal
+          </button>
+        </div>
+
+        <!-- Metrics Overview Grid -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div class="bg-studio-surface border border-studio-border p-5 rounded-2xl">
+            <div class="text-xs text-gray-400">Total Bookings</div>
+            <div id="admin-stat-total" class="text-2xl font-extrabold text-white mt-1">0</div>
+          </div>
+          <div class="bg-studio-surface border border-studio-border p-5 rounded-2xl">
+            <div class="text-xs text-gray-400">Pending Review</div>
+            <div id="admin-stat-pending" class="text-2xl font-extrabold text-amber-400 mt-1">0</div>
+          </div>
+          <div class="bg-studio-surface border border-studio-border p-5 rounded-2xl">
+            <div class="text-xs text-gray-400">Confirmed Events</div>
+            <div id="admin-stat-confirmed" class="text-2xl font-extrabold text-emerald-400 mt-1">0</div>
+          </div>
+          <div class="bg-studio-surface border border-studio-border p-5 rounded-2xl">
+            <div class="text-xs text-gray-400">Recorded Deposits</div>
+            <div id="admin-stat-revenue" class="text-2xl font-extrabold text-studio-gold mt-1">₹0</div>
+          </div>
+        </div>
+
+        <!-- Admin Tab Navigation -->
+        <div class="flex gap-2 border-b border-studio-border overflow-x-auto pb-2 custom-scroll">
+          <button onclick="showAdminTab('bookings')" class="admin-tab-btn active px-4 py-2 rounded-xl text-xs font-bold bg-studio-gold text-black">Bookings Manager</button>
+          <button onclick="showAdminTab('enquiries')" class="admin-tab-btn px-4 py-2 rounded-xl text-xs font-bold bg-studio-surface text-gray-300 hover:text-white">Customer Inquiries</button>
+          <button onclick="showAdminTab('calendar')" class="admin-tab-btn px-4 py-2 rounded-xl text-xs font-bold bg-studio-surface text-gray-300 hover:text-white">Calendar Blockouts</button>
+          <button onclick="showAdminTab('portfolio')" class="admin-tab-btn px-4 py-2 rounded-xl text-xs font-bold bg-studio-surface text-gray-300 hover:text-white">Portfolio Content</button>
+        </div>
+
+        <!-- Tab: Bookings -->
+        <div id="admin-tab-bookings" class="admin-tab-content space-y-4">
+          <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
+            <input type="text" id="admin-booking-search" onkeyup="renderAdminBookings()" placeholder="Search bookings by client, ID, date..." class="w-full sm:w-72 bg-studio-card border border-studio-border rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-studio-gold">
+            <button onclick="exportBookingsCSV()" class="text-xs bg-studio-card hover:bg-studio-surface border border-studio-border px-3 py-2 rounded-xl text-studio-gold flex items-center gap-1.5 whitespace-nowrap">
+              <i class="fa-solid fa-file-csv"></i> Export CSV
+            </button>
+          </div>
+          <div id="admin-bookings-list" class="space-y-3"></div>
+        </div>
+
+        <!-- Tab: Inquiries -->
+        <div id="admin-tab-enquiries" class="admin-tab-content hidden space-y-3">
+          <div id="admin-enquiries-list" class="space-y-3"></div>
+        </div>
+
+        <!-- Tab: Calendar -->
+        <div id="admin-tab-calendar" class="admin-tab-content hidden space-y-6">
+          <div class="bg-studio-surface border border-studio-border rounded-2xl p-6 max-w-lg">
+            <h3 class="text-sm font-bold text-studio-gold mb-3">Block a Date from Customer Booking</h3>
+            <div class="flex gap-2 mb-2">
+              <input type="date" id="block-date-input" class="bg-studio-card border border-studio-border rounded-xl px-3 py-2 text-xs text-white">
+              <input type="text" id="block-reason-input" placeholder="Reason (e.g. Private maintenance)" class="flex-grow bg-studio-card border border-studio-border rounded-xl px-3 py-2 text-xs text-white">
+            </div>
+            <button onclick="addBlockedDate()" class="gold-gradient text-black font-bold px-4 py-2 rounded-xl text-xs">
+              Block Date in Calendar
+            </button>
+          </div>
+          <div>
+            <h3 class="text-sm font-bold text-white mb-3">Currently Blocked Dates</h3>
+            <div id="admin-blocked-dates-list" class="space-y-2 max-w-lg"></div>
+          </div>
+        </div>
+
+        <!-- Tab: Portfolio -->
+        <div id="admin-tab-portfolio" class="admin-tab-content hidden space-y-6">
+          <div class="bg-studio-surface border border-studio-border rounded-2xl p-6 max-w-xl">
+            <h3 class="text-sm font-bold text-studio-gold mb-3">Add Portfolio Photo or Video</h3>
+            <div class="space-y-3">
+              <input type="text" id="port-title" placeholder="Item Title (e.g. Palace Wedding)" class="w-full bg-studio-card border border-studio-border rounded-xl px-3 py-2 text-xs text-white">
+              <div class="grid grid-cols-2 gap-3">
+                <input type="text" id="port-cat" placeholder="Category (e.g. Wedding)" class="bg-studio-card border border-studio-border rounded-xl px-3 py-2 text-xs text-white">
+                <select id="port-type" class="bg-studio-card border border-studio-border rounded-xl px-3 py-2 text-xs text-white">
+                  <option value="PHOTO">PHOTO</option>
+                  <option value="VIDEO">VIDEO</option>
+                </select>
+              </div>
+              <input type="text" id="port-img" placeholder="Image URL (Unsplash or direct asset)" class="w-full bg-studio-card border border-studio-border rounded-xl px-3 py-2 text-xs text-white">
+              <input type="text" id="port-desc" placeholder="Caption description" class="w-full bg-studio-card border border-studio-border rounded-xl px-3 py-2 text-xs text-white">
+              <button onclick="addPortfolioItem()" class="gold-gradient text-black font-bold px-5 py-2 rounded-xl text-xs">
+                Add to Public Gallery
+              </button>
+            </div>
+          </div>
+          <div id="admin-portfolio-list" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="bg-studio-surface border-t border-studio-border mt-auto py-12">
+    <div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-6 text-xs text-gray-500">
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded-full gold-gradient flex items-center justify-center text-black font-bold text-xs">
+          <i class="fa-solid fa-camera"></i>
+        </div>
+        <div>
+          <div class="text-sm font-bold text-white">Smile Studio</div>
+          <div>© 2026 Smile Studio. All rights reserved.</div>
+        </div>
+      </div>
+      <div class="flex flex-wrap gap-6 text-gray-400">
+        <span>Direct: +91 9113272998</span>
+        <span>Email: smileirfan625@gmail.com</span>
+        <span>Bengaluru, India</span>
+      </div>
+      <div>
+        <button onclick="showPage('admin')" class="hover:text-studio-gold text-gray-500">Studio Admin Access</button>
+      </div>
+    </div>
+  </footer>
+
+  <!-- SCRIPT ENGINE -->
+  <script>
+    // CORE DATA
+    const STUDIO_CONFIG = {
+      name: "Smile Studio",
+      phone: "9113272998",
+      email: "smileirfan625@gmail.com",
+      adminPass: "9741"
+    };
+
+    const EVENT_CATEGORIES = [
+      { id: "wedding_photo", name: "Wedding Photography", price: 45000, img: "https://images.unsplash.com/photo-1519741497674-611481863552?w=800&auto=format&fit=crop", desc: "Emotional candids, rituals, bridal portraits, and timeless ceremony captures." },
+      { id: "wedding_video", name: "Wedding Videography", price: 55000, img: "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=800&auto=format&fit=crop", desc: "4K cinematic wedding films, drone aerials, heartfelt audio vows, and reels." },
+      { id: "pre_wedding", name: "Pre-Wedding Shoot", price: 30000, img: "https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=800&auto=format&fit=crop", desc: "Dreamy outdoor destinations, romantic storytelling, and concept song teasers." },
+      { id: "engagement", name: "Engagement", price: 25000, img: "https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?w=800&auto=format&fit=crop", desc: "Ring exchange, intimate family blessings, couple portraits, and joyful candids." },
+      { id: "reception", name: "Reception", price: 35000, img: "https://images.unsplash.com/photo-1469371670807-013ccf25f16a?w=800&auto=format&fit=crop", desc: "Grand entrance, dynamic stage lighting, dance performances, and guest candids." },
+      { id: "birthday", name: "Birthday Party", price: 18000, img: "https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=800&auto=format&fit=crop", desc: "Thematic cake-cutting, child laughs, games, balloon decor, and cheerful candids." },
+      { id: "baby_shower", name: "Baby Shower", price: 20000, img: "https://images.unsplash.com/photo-1516627145497-ae6968895b74?w=800&auto=format&fit=crop", desc: "Warm maternal blessings, traditional rituals, decor details, and family happiness." },
+      { id: "maternity", name: "Maternity Shoot", price: 22000, img: "https://images.unsplash.com/photo-1520854221256-17451cc331bf?w=800&auto=format&fit=crop", desc: "Graceful indoor studio or golden-hour outdoor portraits celebrating new life." },
+      { id: "newborn", name: "Newborn Photography", price: 20000, img: "https://images.unsplash.com/photo-1555252333-9f8e92e65df9?w=800&auto=format&fit=crop", desc: "Gentle cozy setups with safety-first posing props, soft lighting, and swaddles." },
+      { id: "family", name: "Family Photography", price: 18000, img: "https://images.unsplash.com/photo-1609220136736-443140cffec6?w=800&auto=format&fit=crop", desc: "Multi-generational portraits, candid interactions, and heirloom legacy memories." },
+      { id: "couple", name: "Couple Photography", price: 20000, img: "https://images.unsplash.com/photo-1522673607200-164d1b6ce486?w=800&auto=format&fit=crop", desc: "Intimate natural expressions, anniversary celebrations, and candid casual outdoor moments." },
+      { id: "portrait", name: "Portrait Photography", price: 15000, img: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=800&auto=format&fit=crop", desc: "High-end editorial, fashion portfolio, model casting, and artistic headshots." },
+      { id: "graduation", name: "Graduation", price: 15000, img: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=800&auto=format&fit=crop", desc: "Convocation day, cap toss celebration, degree moments, and proud family group photos." },
+      { id: "anniversary", name: "Anniversary", price: 22000, img: "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=800&auto=format&fit=crop", desc: "Silver, golden or first milestone anniversaries captured with grace and nostalgic joy." },
+      { id: "corporate", name: "Corporate Events", price: 30000, img: "https://images.unsplash.com/photo-1511578314322-379afb476865?w=800&auto=format&fit=crop", desc: "Keynotes, annual conferences, leadership headshots, product launches, and brand galas." },
+      { id: "cultural", name: "Cultural Functions", price: 25000, img: "https://images.unsplash.com/photo-1567157577867-05ccb1388e66?w=800&auto=format&fit=crop", desc: "Traditional dances, festive community gatherings, temple functions, and classical arts." },
+      { id: "custom_event", name: "Other Custom Events", price: 20000, img: "https://images.unsplash.com/photo-1465847899084-d164df4dedc6?w=800&auto=format&fit=crop", desc: "Housewarming, private dinners, product showcases, or custom multi-day festivals." }
+    ];
+
+    const PACKAGES = [
+      { id: "pkg_basic", name: "Basic Photography", price: 25000, hours: 4, crew: 1, photos: "150+ Retouched Stills", video: "None (Photo Only)", days: 12, desc: "Ideal for intimate celebrations, birthdays, graduations, and small family ceremonies." },
+      { id: "pkg_premium", name: "Premium Photography", price: 45000, hours: 8, crew: 2, photos: "350+ Retouched Stills", video: "60s Highlight Reel", days: 15, desc: "Comprehensive candid & traditional photography + handcrafted coffee table album." },
+      { id: "pkg_photo_video", name: "Photography + Videography", price: 75000, hours: 8, crew: 4, photos: "500+ Retouched Stills", video: "4K Film (4-6m) + Teaser", days: 20, desc: "Our most requested dual-coverage package combining candid stills and cinema film.", popular: true },
+      { id: "pkg_wedding_royal", name: "Wedding Cinematic Royal", price: 120000, hours: 12, crew: 6, photos: "800+ Master Stills", video: "4K Feature Film (15-20m) + Reels", days: 25, desc: "The ultimate luxury cinematic experience for grand Indian weddings, sangeet & reception.", popular: true },
+      { id: "pkg_pre_wedding", name: "Pre-Wedding Cinematic Story", price: 35000, hours: 6, crew: 2, photos: "80+ Retouched Stills", video: "2-3m Song Teaser + Reel", days: 10, desc: "Romantic cinematic storytelling in breathtaking locations with creative concept styling." },
+      { id: "pkg_custom", name: "Custom Event Package", price: 20000, hours: 4, crew: 2, photos: "120+ Curated Stills", video: "Customizable Add-ons", days: 10, desc: "Tailored coverage designed specifically around your venue, schedule, and unique vision." }
+    ];
+
+    let portfolioItems = [
+      { id: "p1", title: "Royal Bengaluru Palace Wedding", cat: "Wedding", type: "PHOTO", img: "https://images.unsplash.com/photo-1519741497674-611481863552?w=900&auto=format&fit=crop", desc: "Varmala exchange under floral chandeliers." },
+      { id: "p2", title: "Golden Hour Pre-Wedding Film", cat: "Cinematic Video", type: "VIDEO", img: "https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=900&auto=format&fit=crop", desc: "Romantic 4K hills destination couple shoot." },
+      { id: "p3", title: "Bridal Elegance & Mehndi Jewels", cat: "Portraits", type: "PHOTO", img: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=900&auto=format&fit=crop", desc: "Intricate jewelry and candid emotional bridal gaze." },
+      { id: "p4", title: "Sangeet Dance Celebration", cat: "Events", type: "PHOTO", img: "https://images.unsplash.com/photo-1469371670807-013ccf25f16a?w=900&auto=format&fit=crop", desc: "High-energy stage performances and confetti splashes." },
+      { id: "p5", title: "Sunset Love in Nandi Hills", cat: "Reels", type: "VIDEO", img: "https://images.unsplash.com/photo-1522673607200-164d1b6ce486?w=900&auto=format&fit=crop", desc: "Viral cinematic vertical teaser." },
+      { id: "p6", title: "Little Joy: 1st Birthday Wonder", cat: "Birthday", type: "PHOTO", img: "https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=900&auto=format&fit=crop", desc: "Pure innocent smiles and colorful balloons." },
+      { id: "p7", title: "Three Generations of Love", cat: "Family", type: "PHOTO", img: "https://images.unsplash.com/photo-1609220136736-443140cffec6?w=900&auto=format&fit=crop", desc: "Grandparents, parents, and grandchild memories." }
+    ];
+
+    let blockedDates = [
+      { date: "2026-10-25", reason: "Diwali Festival & Studio Gear Maintenance" }
+    ];
+
+    // Local Storage Data Access
+    function getStoredBookings() {
+      const data = localStorage.getItem('smile_studio_bookings');
+      return data ? JSON.parse(data) : [
+        {
+          id: "SS-2026-4821",
+          customerName: "Sneha & Rohit Verma",
+          customerPhone: "9113272998",
+          customerEmail: "sneha.verma@example.com",
+          eventName: "Wedding Photography for Sneha & Rohit",
+          eventTypes: ["Wedding Photography"],
+          services: ["Photography", "Videography", "Cinematic Film"],
+          packageName: "Photography + Videography",
+          packagePrice: 75000,
+          estimatedTotal: 75000,
+          depositAmount: 18750,
+          amountPaid: 18750,
+          paymentStatus: "PARTIAL",
+          eventDate: "2026-11-20",
+          eventTime: "09:00 AM",
+          durationHours: 8,
+          venueLocation: "Palace Grounds, Bengaluru",
+          status: "CONFIRMED",
+          adminNotes: "Crew assigned: 2 Lead Photographers + 2 Cinematographers. Advance deposit verified.",
+          createdAt: Date.now() - 86400000
+        }
+      ];
+    }
+    function saveStoredBookings(list) {
+      localStorage.setItem('smile_studio_bookings', JSON.stringify(list));
+      updateAdminStats();
+    }
+
+    function getStoredEnquiries() {
+      const data = localStorage.getItem('smile_studio_enquiries');
+      return data ? JSON.parse(data) : [];
+    }
+    function saveStoredEnquiries(list) {
+      localStorage.setItem('smile_studio_enquiries', JSON.stringify(list));
+      updateAdminStats();
+    }
+
+    // NAVIGATION
+    function showPage(pageId) {
+      document.querySelectorAll('.page-section').forEach(el => el.classList.add('hidden'));
+      const target = document.getElementById('page-' + pageId);
+      if (target) {
+        target.classList.remove('hidden');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }
+
+    function toggleMobileMenu() {
+      document.getElementById('mobile-menu').classList.toggle('hidden');
+    }
+
+    // INITIAL RENDER
+    window.addEventListener('DOMContentLoaded', () => {
+      renderHomeCategories();
+      renderHomePackages();
+      renderServicesGrid();
+      renderGallery();
+      renderPackagesGrid();
+      renderFaqs();
+      updateAdminStats();
+    });
+
+    function renderHomeCategories() {
+      const container = document.getElementById('home-featured-categories');
+      container.innerHTML = EVENT_CATEGORIES.slice(0, 3).map(c => `
+        <div class="bg-studio-surface border border-studio-border hover:border-studio-gold rounded-2xl overflow-hidden transition-all group flex flex-col">
+          <div class="h-48 overflow-hidden relative">
+            <img src="${c.img}" alt="${c.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+            <span class="absolute top-3 right-3 bg-black/70 backdrop-blur-md text-studio-goldLight text-[10px] font-bold px-2.5 py-1 rounded-full border border-studio-gold/30">From ₹${c.price.toLocaleString()}</span>
+          </div>
+          <div class="p-6 flex flex-col flex-grow justify-between">
+            <div>
+              <h3 class="text-lg font-bold text-white mb-1.5">${c.name}</h3>
+              <p class="text-xs text-gray-400 leading-relaxed mb-4">${c.desc}</p>
+            </div>
+            <button onclick="startBooking('${c.name}')" class="w-full py-2.5 rounded-xl bg-studio-card hover:bg-studio-gold hover:text-black border border-studio-border text-studio-goldLight text-xs font-bold transition-all">
+              Book ${c.name}
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderHomePackages() {
+      const container = document.getElementById('home-featured-packages');
+      container.innerHTML = PACKAGES.slice(1, 4).map(p => `
+        <div class="bg-studio-card border ${p.popular ? 'border-studio-gold gold-border-glow' : 'border-studio-border'} rounded-2xl p-7 flex flex-col justify-between relative">
+          ${p.popular ? '<span class="absolute -top-3 left-1/2 -translate-x-1/2 bg-studio-gold text-black text-[10px] font-extrabold uppercase px-3 py-0.5 rounded-full">Most Popular</span>' : ''}
+          <div>
+            <h3 class="text-xl font-bold text-white">${p.name}</h3>
+            <div class="text-2xl font-black text-studio-goldLight my-3">₹${p.price.toLocaleString()} <span class="text-xs text-gray-400 font-normal">/ event</span></div>
+            <p class="text-xs text-gray-400 leading-relaxed mb-6">${p.desc}</p>
+            <div class="space-y-2 text-xs text-gray-300 border-t border-studio-border pt-4">
+              <div><i class="fa-solid fa-clock text-studio-gold mr-2"></i> ${p.hours}h On-Location Coverage</div>
+              <div><i class="fa-solid fa-users text-studio-gold mr-2"></i> ${p.crew} Crew Members</div>
+              <div><i class="fa-solid fa-image text-studio-gold mr-2"></i> ${p.photos}</div>
+              <div><i class="fa-solid fa-video text-studio-gold mr-2"></i> ${p.video}</div>
+            </div>
+          </div>
+          <button onclick="startBookingPackage('${p.id}')" class="mt-8 w-full py-3 rounded-xl ${p.popular ? 'gold-gradient text-black font-extrabold' : 'bg-studio-surface border border-studio-border text-white hover:border-studio-gold'} text-xs transition-all">
+            Select & Book
+          </button>
+        </div>
+      `).join('');
+    }
+
+    function renderServicesGrid() {
+      const container = document.getElementById('services-grid');
+      container.innerHTML = EVENT_CATEGORIES.map(c => `
+        <div class="service-item bg-studio-surface border border-studio-border hover:border-studio-gold rounded-2xl overflow-hidden transition-all group flex flex-col" data-title="${c.name.toLowerCase()} ${c.desc.toLowerCase()}">
+          <div class="h-44 overflow-hidden relative">
+            <img src="${c.img}" alt="${c.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+            <span class="absolute top-3 right-3 bg-black/70 backdrop-blur-md text-studio-goldLight text-[10px] font-bold px-2.5 py-1 rounded-full border border-studio-gold/30">Starts at ₹${c.price.toLocaleString()}</span>
+          </div>
+          <div class="p-5 flex flex-col flex-grow justify-between">
+            <div>
+              <h3 class="text-base font-bold text-white mb-1">${c.name}</h3>
+              <p class="text-xs text-gray-400 leading-relaxed mb-4">${c.desc}</p>
+            </div>
+            <button onclick="startBooking('${c.name}')" class="w-full py-2.5 rounded-xl gold-gradient text-black font-bold text-xs hover:brightness-110 transition-all flex items-center justify-center gap-1.5">
+              <i class="fa-solid fa-calendar-check"></i> Book This Event
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function filterServices() {
+      const q = document.getElementById('service-search-input').value.toLowerCase();
+      document.querySelectorAll('.service-item').forEach(el => {
+        el.style.display = el.getAttribute('data-title').includes(q) ? 'flex' : 'none';
+      });
+    }
+
+    function renderGallery(cat = 'All') {
+      const container = document.getElementById('gallery-grid');
+      const filtered = cat === 'All' ? portfolioItems : portfolioItems.filter(i => i.cat === cat);
+      container.innerHTML = filtered.map(i => `
+        <div class="bg-studio-surface border border-studio-border rounded-xl overflow-hidden group relative aspect-[4/5] cursor-pointer" onclick="openLightbox('${i.title}', '${i.img}', '${i.desc}', '${i.type}')">
+          <img src="${i.img}" alt="${i.title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+          <div class="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent opacity-80 group-hover:opacity-90 transition-opacity"></div>
+          <div class="absolute top-2.5 right-2.5 bg-black/70 border border-studio-gold/30 text-studio-goldLight text-[9px] font-bold px-2 py-0.5 rounded-full">
+            ${i.type === 'VIDEO' ? '<i class="fa-solid fa-play mr-1"></i> VIDEO' : '<i class="fa-solid fa-camera mr-1"></i> PHOTO'}
+          </div>
+          <div class="absolute bottom-3 left-3 right-3">
+            <span class="text-[10px] text-studio-gold font-bold tracking-wider uppercase block">${i.cat}</span>
+            <h4 class="text-xs font-bold text-white truncate">${i.title}</h4>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function filterGallery(cat) {
+      document.querySelectorAll('.gallery-filter-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.innerText === cat || (cat === 'All' && btn.innerText === 'All'));
+        btn.className = btn.innerText === cat 
+          ? 'gallery-filter-btn active px-4 py-1.5 rounded-full text-xs font-semibold bg-studio-gold text-black transition-all'
+          : 'gallery-filter-btn px-4 py-1.5 rounded-full text-xs font-semibold bg-studio-surface border border-studio-border text-gray-300 hover:text-white transition-all';
+      });
+      renderGallery(cat);
+    }
+
+    function renderPackagesGrid() {
+      const container = document.getElementById('packages-grid');
+      container.innerHTML = PACKAGES.map(p => `
+        <div class="bg-studio-surface border ${p.popular ? 'border-studio-gold gold-border-glow' : 'border-studio-border'} rounded-2xl p-7 flex flex-col justify-between relative">
+          ${p.popular ? '<span class="absolute -top-3 left-1/2 -translate-x-1/2 bg-studio-gold text-black text-[10px] font-extrabold uppercase px-3 py-0.5 rounded-full">Popular Choice</span>' : ''}
+          <div>
+            <h3 class="text-xl font-bold text-white">${p.name}</h3>
+            <div class="text-3xl font-black text-studio-goldLight my-3">₹${p.price.toLocaleString()} <span class="text-xs text-gray-400 font-normal">INR</span></div>
+            <p class="text-xs text-gray-400 leading-relaxed mb-6">${p.desc}</p>
+            <div class="space-y-2.5 text-xs text-gray-300 border-t border-studio-border pt-4">
+              <div><i class="fa-solid fa-clock text-studio-gold mr-2"></i> ${p.hours}h On-Location Coverage</div>
+              <div><i class="fa-solid fa-users text-studio-gold mr-2"></i> ${p.crew} Photographers & Cinematographers</div>
+              <div><i class="fa-solid fa-image text-studio-gold mr-2"></i> ${p.photos}</div>
+              <div><i class="fa-solid fa-video text-studio-gold mr-2"></i> ${p.video}</div>
+              <div><i class="fa-solid fa-truck-fast text-studio-gold mr-2"></i> Delivered in ${p.days} Days</div>
+            </div>
+          </div>
+          <button onclick="startBookingPackage('${p.id}')" class="mt-8 w-full py-3 rounded-xl ${p.popular ? 'gold-gradient text-black font-extrabold' : 'bg-studio-card border border-studio-border text-white hover:border-studio-gold'} text-xs transition-all">
+            Select & Customize in Booking
+          </button>
+        </div>
+      `).join('');
+    }
+
+    function renderFaqs() {
+      const faqs = [
+        { q: "How do I confirm my booking?", a: "After submitting your request, our studio verifies date availability and approves your request. A 25% deposit secures your date on our calendar." },
+        { q: "When will we receive our photos and videos?", a: "Teaser highlights are delivered within 48-72 hours. Complete retouched galleries and cinematic feature films are delivered within 12-25 days depending on the selected package." },
+        { q: "Do you travel for destination shoots?", a: "Yes! Smile Studio covers events across India and internationally. Travel and accommodation are arranged or billed transparently based on destination." },
+        { q: "Can we customize packages and add drone coverage?", a: "Absolutely! Every package can be tailored with optional add-ons like 4K drone cinematography, luxury handcrafted parent albums, and live streaming." }
+      ];
+      document.getElementById('faq-container').innerHTML = faqs.map((f, i) => `
+        <details class="bg-studio-surface border border-studio-border rounded-xl p-4 text-xs group">
+          <summary class="font-bold text-sm text-white cursor-pointer list-none flex justify-between items-center group-open:text-studio-gold">
+            ${f.q}
+            <i class="fa-solid fa-chevron-down text-gray-400 group-open:rotate-180 transition-transform"></i>
+          </summary>
+          <p class="text-gray-400 mt-3 pt-3 border-t border-studio-border leading-relaxed">${f.a}</p>
+        </details>
+      `).join('');
+    }
+
+    // 7-STEP BOOKING WIZARD ENGINE
+    let bookingWizard = {
+      step: 1,
+      selectedEvents: ["Wedding Photography"],
+      selectedServices: ["Photography", "Videography", "Cinematic Film"],
+      selectedPackageId: "pkg_photo_video",
+      eventDate: "2026-11-20",
+      eventTime: "09:00 AM",
+      duration: 8,
+      venue: "Palace Grounds, Bengaluru",
+      altDate: "",
+      clientName: "",
+      clientPhone: "",
+      clientEmail: "",
+      specialNotes: "",
+      preferredContact: "WhatsApp",
+      confirmedBooking: null
+    };
+
+    function startBooking(eventName = null) {
+      bookingWizard.step = 1;
+      bookingWizard.confirmedBooking = null;
+      if (eventName) bookingWizard.selectedEvents = [eventName];
+      showPage('booking');
+      renderBookingStep();
+    }
+
+    function startBookingPackage(pkgId) {
+      bookingWizard.step = 3;
+      bookingWizard.selectedPackageId = pkgId;
+      showPage('booking');
+      renderBookingStep();
+    }
+
+    function getSelectedPackage() {
+      return PACKAGES.find(p => p.id === bookingWizard.selectedPackageId) || PACKAGES[2];
+    }
+
+    function calculateBookingTotal() {
+      const pkg = getSelectedPackage();
+      let total = pkg.price;
+      if (bookingWizard.selectedServices.includes("Drone Coverage")) total += 12000;
+      if (bookingWizard.selectedServices.includes("Luxury Album & Prints")) total += 15000;
+      if (bookingWizard.selectedServices.includes("Raw Footage")) total += 8000;
+      if (bookingWizard.selectedServices.includes("Live Streaming")) total += 10000;
+      const deposit = total * 0.25;
+      return { total, deposit, balance: total - deposit };
+    }
+
+    function renderBookingStep() {
+      const step = bookingWizard.step;
+      document.getElementById('booking-step-label').innerText = `STEP ${step} OF 7`;
+      
+      const bars = document.getElementById('booking-progress-bars').children;
+      for (let i = 0; i < 7; i++) {
+        bars[i].className = i < step ? 'bg-studio-gold rounded-full h-full' : 'bg-studio-border rounded-full h-full';
+      }
+
+      const container = document.getElementById('booking-step-container');
+
+      if (step === 1) {
+        document.getElementById('booking-step-name').innerText = "Select Event";
+        container.innerHTML = `
+          <h2 class="text-xl font-bold text-white mb-1">Which event are you celebrating?</h2>
+          <p class="text-xs text-gray-400 mb-6">Choose one or multiple events for multi-day celebration coverage.</p>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-8">
+            ${EVENT_CATEGORIES.map(c => `
+              <label class="flex items-center gap-3 p-3 rounded-xl border ${bookingWizard.selectedEvents.includes(c.name) ? 'border-studio-gold bg-studio-goldBg' : 'border-studio-border bg-studio-card'} cursor-pointer text-xs">
+                <input type="checkbox" ${bookingWizard.selectedEvents.includes(c.name) ? 'checked' : ''} onchange="toggleBookingEvent('${c.name}')" class="accent-amber-400">
+                <span class="${bookingWizard.selectedEvents.includes(c.name) ? 'text-studio-goldLight font-bold' : 'text-gray-300'}">${c.name}</span>
+              </label>
+            `).join('')}
+          </div>
+          <div class="flex justify-end">
+            <button onclick="nextBookingStep()" class="gold-gradient text-black font-bold px-6 py-2.5 rounded-xl text-xs flex items-center gap-2">
+              Next: Services <i class="fa-solid fa-arrow-right"></i>
+            </button>
+          </div>
+        `;
+      } else if (step === 2) {
+        document.getElementById('booking-step-name').innerText = "Select Services";
+        const services = [
+          { name: "Photography", desc: "Senior candid and traditional photographers with prime optics" },
+          { name: "Videography", desc: "High-definition video coverage with wireless audio capture" },
+          { name: "Cinematic Film", desc: "4K storytelling film, emotional vows, master color grading" },
+          { name: "Drone Coverage", desc: "Licensed aerial perspectives of venue & couple (+₹12,000)" },
+          { name: "Luxury Album & Prints", desc: "Handcrafted flush-mount leather album with art paper (+₹15,000)" },
+          { name: "Raw Footage", desc: "Full unedited video files & original RAW photos on SSD (+₹8,000)" },
+          { name: "Live Streaming", desc: "Multi-cam live broadcast for friends & family globally (+₹10,000)" }
+        ];
+        container.innerHTML = `
+          <h2 class="text-xl font-bold text-white mb-1">Choose Your Production Scope</h2>
+          <p class="text-xs text-gray-400 mb-6">Select photography, videography, cinema, and premium physical deliverables.</p>
+          <div class="space-y-3 mb-8">
+            ${services.map(s => `
+              <label class="flex items-start gap-3 p-4 rounded-xl border ${bookingWizard.selectedServices.includes(s.name) ? 'border-studio-gold bg-studio-goldBg' : 'border-studio-border bg-studio-card'} cursor-pointer text-xs">
+                <input type="checkbox" ${bookingWizard.selectedServices.includes(s.name) ? 'checked' : ''} onchange="toggleBookingService('${s.name}')" class="accent-amber-400 mt-0.5">
+                <div>
+                  <div class="font-bold ${bookingWizard.selectedServices.includes(s.name) ? 'text-studio-goldLight' : 'text-white'}">${s.name}</div>
+                  <div class="text-gray-400 mt-0.5">${s.desc}</div>
+                </div>
+              </label>
+            `).join('')}
+          </div>
+          <div class="flex justify-between">
+            <button onclick="prevBookingStep()" class="border border-studio-border px-5 py-2.5 rounded-xl text-xs text-gray-300">Previous</button>
+            <button onclick="nextBookingStep()" class="gold-gradient text-black font-bold px-6 py-2.5 rounded-xl text-xs flex items-center gap-2">Next: Package <i class="fa-solid fa-arrow-right"></i></button>
+          </div>
+        `;
+      } else if (step === 3) {
+        document.getElementById('booking-step-name').innerText = "Select Package";
+        const calc = calculateBookingTotal();
+        container.innerHTML = `
+          <h2 class="text-xl font-bold text-white mb-1">Choose Studio Package</h2>
+          <p class="text-xs text-gray-400 mb-4">Select the baseline coverage plan for your celebration.</p>
+          <div class="bg-studio-card border border-studio-gold/40 p-4 rounded-xl mb-6 flex justify-between items-center text-xs">
+            <div>
+              <span class="text-gray-400">Estimated Total:</span>
+              <div class="text-lg font-bold text-studio-goldLight">₹${calc.total.toLocaleString()} INR</div>
+            </div>
+            <div class="text-right">
+              <span class="text-gray-400">25% Deposit Upon Approval:</span>
+              <div class="text-sm font-bold text-white">₹${calc.deposit.toLocaleString()}</div>
+            </div>
+          </div>
+          <div class="space-y-3 mb-8">
+            ${PACKAGES.map(p => `
+              <label class="flex items-center justify-between p-4 rounded-xl border ${bookingWizard.selectedPackageId === p.id ? 'border-studio-gold bg-studio-goldBg' : 'border-studio-border bg-studio-card'} cursor-pointer text-xs">
+                <div class="flex items-center gap-3">
+                  <input type="radio" name="pkg" ${bookingWizard.selectedPackageId === p.id ? 'checked' : ''} onchange="selectBookingPackage('${p.id}')" class="accent-amber-400">
+                  <div>
+                    <div class="font-bold text-sm ${bookingWizard.selectedPackageId === p.id ? 'text-studio-goldLight' : 'text-white'}">${p.name}</div>
+                    <div class="text-gray-400">${p.hours}h Coverage • ${p.crew} Crew • ${p.photos}</div>
+                  </div>
+                </div>
+                <div class="font-extrabold text-sm text-studio-goldLight ml-3">₹${p.price.toLocaleString()}</div>
+              </label>
+            `).join('')}
+          </div>
+          <div class="flex justify-between">
+            <button onclick="prevBookingStep()" class="border border-studio-border px-5 py-2.5 rounded-xl text-xs text-gray-300">Previous</button>
+            <button onclick="nextBookingStep()" class="gold-gradient text-black font-bold px-6 py-2.5 rounded-xl text-xs flex items-center gap-2">Next: Schedule <i class="fa-solid fa-arrow-right"></i></button>
+          </div>
+        `;
+      } else if (step === 4) {
+        document.getElementById('booking-step-name').innerText = "Date & Availability";
+        container.innerHTML = `
+          <h2 class="text-xl font-bold text-white mb-1">Event Date, Time & Venue</h2>
+          <p class="text-xs text-gray-400 mb-6">Smile Studio verifies calendar availability to prevent overlapping reservations.</p>
+          <div class="space-y-4 mb-6 text-xs">
+            <div>
+              <label class="block font-semibold text-gray-300 mb-1">Event Date (YYYY-MM-DD)*</label>
+              <div class="flex gap-2">
+                <input type="date" id="book-date" value="${bookingWizard.eventDate}" class="flex-grow bg-studio-card border border-studio-border rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-studio-gold">
+                <button type="button" onclick="verifyDateAvailability()" class="bg-studio-card hover:bg-studio-surface border border-studio-gold text-studio-goldLight font-bold px-4 py-2.5 rounded-xl">Verify Date</button>
+              </div>
+              <div id="date-avail-msg" class="text-xs mt-2"></div>
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label class="block font-semibold text-gray-300 mb-1">Preferred Start Time*</label>
+                <input type="text" id="book-time" value="${bookingWizard.eventTime}" placeholder="09:00 AM" class="w-full bg-studio-card border border-studio-border rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-studio-gold">
+              </div>
+              <div>
+                <label class="block font-semibold text-gray-300 mb-1">Expected Duration (Hours)</label>
+                <input type="number" id="book-duration" value="${bookingWizard.duration}" class="w-full bg-studio-card border border-studio-border rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-studio-gold">
+              </div>
+            </div>
+            <div>
+              <label class="block font-semibold text-gray-300 mb-1">Event Venue & City*</label>
+              <input type="text" id="book-venue" value="${bookingWizard.venue}" placeholder="e.g. Palace Grounds, Bengaluru" class="w-full bg-studio-card border border-studio-border rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-studio-gold">
+            </div>
+            <div>
+              <label class="block font-semibold text-gray-300 mb-1">Alternative Backup Date (Optional)</label>
+              <input type="date" id="book-alt-date" value="${bookingWizard.altDate}" class="w-full bg-studio-card border border-studio-border rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-studio-gold">
+            </div>
+          </div>
+          <div class="flex justify-between">
+            <button onclick="prevBookingStep()" class="border border-studio-border px-5 py-2.5 rounded-xl text-xs text-gray-300">Previous</button>
+            <button onclick="saveStep4AndNext()" class="gold-gradient text-black font-bold px-6 py-2.5 rounded-xl text-xs flex items-center gap-2">Next: Details <i class="fa-solid fa-arrow-right"></i></button>
+          </div>
+        `;
+      } else if (step === 5) {
+        document.getElementById('booking-step-name').innerText = "Client Details";
+        container.innerHTML = `
+          <h2 class="text-xl font-bold text-white mb-1">Who Are We Crafting Memories For?</h2>
+          <p class="text-xs text-gray-400 mb-6">We will send your official booking reference and pending approval notice here.</p>
+          <div class="space-y-4 mb-8 text-xs">
+            <div>
+              <label class="block font-semibold text-gray-300 mb-1">Full Name*</label>
+              <input type="text" id="book-name" value="${bookingWizard.clientName}" placeholder="e.g. Irfan Ahmed / Priya & Rohit" class="w-full bg-studio-card border border-studio-border rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-studio-gold">
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block font-semibold text-gray-300 mb-1">Contact Phone Number*</label>
+                <input type="tel" id="book-phone" value="${bookingWizard.clientPhone}" placeholder="e.g. 9113272998" class="w-full bg-studio-card border border-studio-border rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-studio-gold">
+              </div>
+              <div>
+                <label class="block font-semibold text-gray-300 mb-1">Email Address*</label>
+                <input type="email" id="book-email" value="${bookingWizard.clientEmail}" placeholder="name@domain.com" class="w-full bg-studio-card border border-studio-border rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-studio-gold">
+              </div>
+            </div>
+            <div>
+              <label class="block font-semibold text-gray-300 mb-1">Preferred Contact Channel</label>
+              <div class="flex gap-4">
+                ${['WhatsApp', 'Phone Call', 'Email'].map(ch => `
+                  <label class="flex items-center gap-2 cursor-pointer">
+                    <input type="radio" name="pref_ch" value="${ch}" ${bookingWizard.preferredContact === ch ? 'checked' : ''} onchange="bookingWizard.preferredContact='${ch}'" class="accent-amber-400">
+                    <span class="text-gray-300">${ch}</span>
+                  </label>
+                `).join('')}
+              </div>
+            </div>
+            <div>
+              <label class="block font-semibold text-gray-300 mb-1">Special Instructions / Shot List Ideas (Optional)</label>
+              <textarea id="book-notes" rows="3" placeholder="Tell us about specific rituals, outfits, or custom requests..." class="w-full bg-studio-card border border-studio-border rounded-xl px-4 py-2 text-white focus:outline-none focus:border-studio-gold">${bookingWizard.specialNotes}</textarea>
+            </div>
+          </div>
+          <div class="flex justify-between">
+            <button onclick="prevBookingStep()" class="border border-studio-border px-5 py-2.5 rounded-xl text-xs text-gray-300">Previous</button>
+            <button onclick="saveStep5AndNext()" class="gold-gradient text-black font-bold px-6 py-2.5 rounded-xl text-xs flex items-center gap-2">Next: Summary <i class="fa-solid fa-arrow-right"></i></button>
+          </div>
+        `;
+      } else if (step === 6) {
+        document.getElementById('booking-step-name').innerText = "Booking Summary";
+        const calc = calculateBookingTotal();
+        const pkg = getSelectedPackage();
+        container.innerHTML = `
+          <h2 class="text-xl font-bold text-white mb-1">Review Booking Summary</h2>
+          <p class="text-xs text-gray-400 mb-6">Review your selections and estimated investment before submitting request.</p>
+          
+          <div class="bg-studio-card border border-studio-border rounded-xl p-5 mb-6 text-xs space-y-3">
+            <div class="flex justify-between border-b border-studio-border pb-3">
+              <div>
+                <span class="text-gray-400 block text-[10px] uppercase">Client Details</span>
+                <span class="font-bold text-white text-sm">${bookingWizard.clientName}</span>
+                <div class="text-gray-400">${bookingWizard.clientPhone} • ${bookingWizard.clientEmail}</div>
+              </div>
+              <div class="text-right">
+                <span class="text-gray-400 block text-[10px] uppercase">Contact Via</span>
+                <span class="font-bold text-studio-goldLight">${bookingWizard.preferredContact}</span>
+              </div>
+            </div>
+
+            <div class="flex justify-between border-b border-studio-border pb-3">
+              <div>
+                <span class="text-gray-400 block text-[10px] uppercase">Event & Schedule</span>
+                <span class="font-bold text-white">${bookingWizard.selectedEvents.join(', ')}</span>
+                <div class="text-gray-400">${bookingWizard.eventDate} at ${bookingWizard.eventTime} (${bookingWizard.duration}h)</div>
+                <div class="text-gray-400">Venue: ${bookingWizard.venue}</div>
+              </div>
+            </div>
+
+            <div class="space-y-1.5 border-b border-studio-border pb-3">
+              <span class="text-gray-400 block text-[10px] uppercase">Itemized Pricing</span>
+              <div class="flex justify-between text-gray-300">
+                <span>Base Package (${pkg.name}):</span>
+                <span>₹${pkg.price.toLocaleString()}</span>
+              </div>
+              ${bookingWizard.selectedServices.filter(s => ["Drone Coverage", "Luxury Album & Prints", "Raw Footage", "Live Streaming"].includes(s)).map(s => {
+                const addPrice = s === "Drone Coverage" ? 12000 : s === "Luxury Album & Prints" ? 15000 : s === "Raw Footage" ? 8000 : 10000;
+                return `<div class="flex justify-between text-gray-300"><span>+ ${s}:</span><span>₹${addPrice.toLocaleString()}</span></div>`;
+              }).join('')}
+              <div class="flex justify-between text-studio-goldLight font-bold text-sm pt-2">
+                <span>Estimated Total:</span>
+                <span>₹${calc.total.toLocaleString()} INR</span>
+              </div>
+              <div class="flex justify-between text-white font-semibold">
+                <span>Required 25% Deposit Upon Approval:</span>
+                <span>₹${calc.deposit.toLocaleString()}</span>
+              </div>
+            </div>
+
+            <div class="text-[11px] text-gray-400 leading-relaxed">
+              <i class="fa-solid fa-circle-info text-studio-gold mr-1"></i>
+              <strong>Policy:</strong> Submitting this request is completely free. No payment is charged now. Once approved by our studio director, a 25% advance deposit secures your calendar date.
+            </div>
+          </div>
+
+          <div class="flex justify-between">
+            <button onclick="prevBookingStep()" class="border border-studio-border px-5 py-2.5 rounded-xl text-xs text-gray-300">Previous</button>
+            <button onclick="submitFinalBookingRequest()" class="gold-gradient text-black font-extrabold px-7 py-3 rounded-xl text-xs shadow-lg hover:brightness-110 flex items-center gap-2">
+              <i class="fa-solid fa-check-circle"></i> Submit Booking Request
+            </button>
+          </div>
+        `;
+      } else if (step === 7) {
+        document.getElementById('booking-step-name').innerText = "Confirmed";
+        const b = bookingWizard.confirmedBooking;
+        container.innerHTML = `
+          <div class="text-center py-6">
+            <div class="w-16 h-16 rounded-full bg-studio-goldBg border-2 border-studio-gold text-studio-gold text-2xl flex items-center justify-center mx-auto mb-4">
+              <i class="fa-solid fa-check-circle"></i>
+            </div>
+            <h2 class="text-2xl font-bold text-white mb-1">Booking Request Received!</h2>
+            <p class="text-xs text-gray-400 mb-6">Your request has been logged in Smile Studio's database. Save your reference below.</p>
+            
+            <div class="bg-studio-card gold-border-glow rounded-2xl p-6 max-w-md mx-auto mb-6 text-left">
+              <div class="text-center pb-4 border-b border-studio-border">
+                <span class="text-[10px] text-studio-gold font-bold uppercase tracking-widest block">Booking Reference</span>
+                <span class="text-3xl font-black text-white tracking-widest">${b.id}</span>
+                <div class="mt-2"><span class="bg-amber-950 text-amber-400 border border-amber-700/50 text-[10px] font-bold px-3 py-0.5 rounded-full uppercase">Pending Studio Approval</span></div>
+              </div>
+              <div class="pt-4 space-y-2 text-xs text-gray-300">
+                <div class="flex justify-between"><span>Client:</span><strong class="text-white">${b.customerName}</strong></div>
+                <div class="flex justify-between"><span>Event Date:</span><strong class="text-studio-goldLight">${b.eventDate} (${b.eventTime})</strong></div>
+                <div class="flex justify-between"><span>Package:</span><span>${b.packageName}</span></div>
+                <div class="flex justify-between"><span>Estimated Total:</span><strong class="text-white">₹${b.estimatedTotal.toLocaleString()} INR</strong></div>
+              </div>
+            </div>
+
+            <div class="flex flex-col sm:flex-row justify-center gap-3 max-w-md mx-auto">
+              <a href="https://wa.me/919113272998?text=Hello%20Smile%20Studio!%20I%20have%20submitted%20booking%20reference%20${b.id}%20for%20${b.eventDate}." target="_blank" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 px-6 rounded-xl text-xs flex items-center justify-center gap-2">
+                <i class="fa-brands fa-whatsapp text-sm"></i> WhatsApp Studio Now
+              </a>
+              <button onclick="showPage('lookup'); document.getElementById('lookup-input').value='${b.id}'; performBookingLookup();" class="border border-studio-gold text-studio-goldLight font-bold py-3 px-6 rounded-xl text-xs hover:bg-studio-card">
+                Track Status Online
+              </button>
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    function toggleBookingEvent(name) {
+      const idx = bookingWizard.selectedEvents.indexOf(name);
+      if (idx > -1) {
+        if (bookingWizard.selectedEvents.length > 1) bookingWizard.selectedEvents.splice(idx, 1);
+      } else {
+        bookingWizard.selectedEvents.push(name);
+      }
+      renderBookingStep();
+    }
+
+    function toggleBookingService(name) {
+      const idx = bookingWizard.selectedServices.indexOf(name);
+      if (idx > -1) {
+        if (bookingWizard.selectedServices.length > 1) bookingWizard.selectedServices.splice(idx, 1);
+      } else {
+        bookingWizard.selectedServices.push(name);
+      }
+      renderBookingStep();
+    }
+
+    function selectBookingPackage(id) {
+      bookingWizard.selectedPackageId = id;
+      renderBookingStep();
+    }
+
+    function nextBookingStep() {
+      if (bookingWizard.step < 7) {
+        bookingWizard.step++;
+        renderBookingStep();
+      }
+    }
+
+    function prevBookingStep() {
+      if (bookingWizard.step > 1) {
+        bookingWizard.step--;
+        renderBookingStep();
+      }
+    }
+
+    function verifyDateAvailability() {
+      const dateVal = document.getElementById('book-date').value;
+      const msgEl = document.getElementById('date-avail-msg');
+      if (!dateVal) {
+        msgEl.innerHTML = `<span class="text-rose-400 font-semibold">Please select a valid date.</span>`;
+        return false;
+      }
+      const isBlocked = blockedDates.some(b => b.date === dateVal);
+      if (isBlocked) {
+        msgEl.innerHTML = `<span class="text-rose-400 font-semibold"><i class="fa-solid fa-triangle-exclamation"></i> Date unavailable: Studio is closed or blocked. Please choose an alternative date.</span>`;
+        return false;
+      }
+      msgEl.innerHTML = `<span class="text-emerald-400 font-semibold"><i class="fa-solid fa-circle-check"></i> Date is open and available for booking!</span>`;
+      return true;
+    }
+
+    function saveStep4AndNext() {
+      bookingWizard.eventDate = document.getElementById('book-date').value;
+      bookingWizard.eventTime = document.getElementById('book-time').value;
+      bookingWizard.duration = parseInt(document.getElementById('book-duration').value) || 4;
+      bookingWizard.venue = document.getElementById('book-venue').value;
+      bookingWizard.altDate = document.getElementById('book-alt-date').value;
+
+      if (!bookingWizard.eventDate || !bookingWizard.venue) {
+        alert("Please provide the event date and venue.");
+        return;
+      }
+      if (!verifyDateAvailability()) {
+        alert("The selected date is blocked or unavailable. Please pick another date.");
+        return;
+      }
+      nextBookingStep();
+    }
+
+    function saveStep5AndNext() {
+      bookingWizard.clientName = document.getElementById('book-name').value.trim();
+      bookingWizard.clientPhone = document.getElementById('book-phone').value.trim();
+      bookingWizard.clientEmail = document.getElementById('book-email').value.trim();
+      bookingWizard.specialNotes = document.getElementById('book-notes').value.trim();
+
+      if (!bookingWizard.clientName || bookingWizard.clientPhone.length < 8 || !bookingWizard.clientEmail.includes('@')) {
+        alert("Please provide a valid name, contact phone number, and email address.");
+        return;
+      }
+      nextBookingStep();
+    }
+
+    function submitFinalBookingRequest() {
+      const calc = calculateBookingTotal();
+      const pkg = getSelectedPackage();
+      const randomNum = Math.floor(1000 + Math.random() * 9000);
+      const newRef = `SS-2026-${randomNum}`;
+
+      const newBooking = {
+        id: newRef,
+        customerName: bookingWizard.clientName,
+        customerPhone: bookingWizard.clientPhone,
+        customerEmail: bookingWizard.clientEmail,
+        eventName: `${bookingWizard.selectedEvents.join(', ')} for ${bookingWizard.clientName}`,
+        eventTypes: [...bookingWizard.selectedEvents],
+        services: [...bookingWizard.selectedServices],
+        packageName: pkg.name,
+        packagePrice: pkg.price,
+        estimatedTotal: calc.total,
+        depositAmount: calc.deposit,
+        amountPaid: 0,
+        paymentStatus: "PENDING",
+        eventDate: bookingWizard.eventDate,
+        eventTime: bookingWizard.eventTime,
+        durationHours: bookingWizard.duration,
+        venueLocation: bookingWizard.venue,
+        alternativeDate: bookingWizard.altDate,
+        specialInstructions: bookingWizard.specialNotes,
+        preferredContactMethod: bookingWizard.preferredContact,
+        status: "PENDING",
+        adminNotes: "New online booking request. Pending review.",
+        createdAt: Date.now()
+      };
+
+      const all = getStoredBookings();
+      all.unshift(newBooking);
+      saveStoredBookings(all);
+
+      bookingWizard.confirmedBooking = newBooking;
+      bookingWizard.step = 7;
+      renderBookingStep();
+    }
+
+    // BOOKING LOOKUP
+    function performBookingLookup() {
+      const q = document.getElementById('lookup-input').value.trim().toUpperCase();
+      const errorEl = document.getElementById('lookup-error');
+      const resultCard = document.getElementById('lookup-result-card');
+
+      if (!q) {
+        errorEl.innerText = "Please enter your reference ID.";
+        errorEl.classList.remove('hidden');
+        resultCard.classList.add('hidden');
+        return;
+      }
+
+      const all = getStoredBookings();
+      const found = all.find(b => b.id.toUpperCase() === q);
+
+      if (!found) {
+        errorEl.innerText = `No booking found for reference "${q}". Please double check your code.`;
+        errorEl.classList.remove('hidden');
+        resultCard.classList.add('hidden');
+        return;
+      }
+
+      errorEl.classList.add('hidden');
+      resultCard.classList.remove('hidden');
+
+      const statusBadge = found.status === 'CONFIRMED' 
+        ? '<span class="bg-emerald-950 text-emerald-400 border border-emerald-700/50 text-xs px-2.5 py-0.5 rounded-full font-bold">Confirmed</span>'
+        : found.status === 'PENDING'
+        ? '<span class="bg-amber-950 text-amber-400 border border-amber-700/50 text-xs px-2.5 py-0.5 rounded-full font-bold">Pending Review</span>'
+        : `<span class="bg-gray-800 text-gray-300 text-xs px-2.5 py-0.5 rounded-full font-bold">${found.status}</span>`;
+
+      resultCard.innerHTML = `
+        <div class="flex justify-between items-start border-b border-studio-border pb-4 mb-4">
+          <div>
+            <span class="text-xs text-studio-gold font-bold">REFERENCE: ${found.id}</span>
+            <h3 class="text-base font-bold text-white">${found.eventName}</h3>
+            <div class="text-xs text-gray-400">${found.customerName}</div>
+          </div>
+          <div>${statusBadge}</div>
+        </div>
+        <div class="space-y-2 text-xs text-gray-300 mb-6">
+          <div class="flex justify-between"><span>Event Date & Time:</span><strong class="text-white">${found.eventDate} at ${found.eventTime}</strong></div>
+          <div class="flex justify-between"><span>Venue:</span><span>${found.venueLocation}</span></div>
+          <div class="flex justify-between"><span>Package Plan:</span><span>${found.packageName}</span></div>
+          <div class="flex justify-between"><span>Estimated Investment:</span><strong class="text-studio-goldLight">₹${found.estimatedTotal.toLocaleString()} INR</strong></div>
+          <div class="flex justify-between"><span>Recorded Advance:</span><strong class="text-emerald-400">₹${(found.amountPaid || 0).toLocaleString()} INR (${found.paymentStatus || 'PENDING'})</strong></div>
+        </div>
+        ${found.adminNotes ? `
+          <div class="bg-studio-card border border-studio-gold/30 p-3 rounded-xl text-xs mb-6">
+            <span class="text-studio-gold font-bold block mb-1">Studio Manager Note:</span>
+            <p class="text-gray-300">${found.adminNotes}</p>
+          </div>
+        ` : ''}
+        <div class="flex gap-2">
+          <a href="https://wa.me/919113272998?text=Hello%20Smile%20Studio!%20Inquiring%20about%20booking%20reference%20${found.id}." target="_blank" class="w-full text-center bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2.5 rounded-xl text-xs">
+            <i class="fa-brands fa-whatsapp mr-1"></i> Chat with Studio Regarding Booking
+          </a>
+        </div>
+      `;
+    }
+
+    // ENQUIRY SUBMISSION
+    function handleEnquirySubmit(e) {
+      e.preventDefault();
+      const newEnq = {
+        id: "enq_" + Date.now(),
+        name: document.getElementById('enq-name').value.trim(),
+        phone: document.getElementById('enq-phone').value.trim(),
+        email: document.getElementById('enq-email').value.trim(),
+        type: document.getElementById('enq-type').value,
+        reference: document.getElementById('enq-ref').value.trim(),
+        message: document.getElementById('enq-message').value.trim(),
+        isRead: false,
+        createdAt: Date.now()
+      };
+
+      const all = getStoredEnquiries();
+      all.unshift(newEnq);
+      saveStoredEnquiries(all);
+
+      document.getElementById('enquiry-success').classList.remove('hidden');
+      document.getElementById('enquiry-form').reset();
+      setTimeout(() => {
+        document.getElementById('enquiry-success').classList.add('hidden');
+      }, 6000);
+    }
+
+    // ADMIN PORTAL ENGINE (PASSWORD: 9741)
+    let isAdminLoggedIn = false;
+
+    function handleAdminLogin(e) {
+      e.preventDefault();
+      const pass = document.getElementById('admin-password-input').value.trim();
+      const err = document.getElementById('admin-login-error');
+
+      if (pass === STUDIO_CONFIG.adminPass) {
+        isAdminLoggedIn = true;
+        err.classList.add('hidden');
+        document.getElementById('admin-login-gate').classList.add('hidden');
+        document.getElementById('admin-dashboard-content').classList.remove('hidden');
+        renderAdminBookings();
+        renderAdminEnquiries();
+        renderAdminCalendar();
+        renderAdminPortfolio();
+        updateAdminStats();
+      } else {
+        err.classList.remove('hidden');
+      }
+    }
+
+    function handleAdminLogout() {
+      isAdminLoggedIn = false;
+      document.getElementById('admin-password-input').value = '';
+      document.getElementById('admin-login-gate').classList.remove('hidden');
+      document.getElementById('admin-dashboard-content').classList.add('hidden');
+    }
+
+    function showAdminTab(tabId) {
+      document.querySelectorAll('.admin-tab-content').forEach(el => el.classList.add('hidden'));
+      document.querySelectorAll('.admin-tab-btn').forEach(btn => {
+        btn.className = 'admin-tab-btn px-4 py-2 rounded-xl text-xs font-bold bg-studio-surface text-gray-300 hover:text-white';
+      });
+      document.getElementById('admin-tab-' + tabId).classList.remove('hidden');
+      event.target.className = 'admin-tab-btn active px-4 py-2 rounded-xl text-xs font-bold bg-studio-gold text-black';
+    }
+
+    function updateAdminStats() {
+      const bookings = getStoredBookings();
+      const enquiries = getStoredEnquiries();
+
+      const total = bookings.length;
+      const pending = bookings.filter(b => b.status === 'PENDING').length;
+      const confirmed = bookings.filter(b => b.status === 'CONFIRMED').length;
+      const revenue = bookings.reduce((sum, b) => sum + (b.amountPaid || 0), 0);
+      const unreadEnquiries = enquiries.filter(e => !e.isRead).length;
+
+      const badge = document.getElementById('nav-unread-badge');
+      if (unreadEnquiries > 0) {
+        badge.innerText = unreadEnquiries;
+        badge.classList.remove('hidden');
+      } else {
+        badge.classList.add('hidden');
+      }
+
+      if (document.getElementById('admin-stat-total')) {
+        document.getElementById('admin-stat-total').innerText = total;
+        document.getElementById('admin-stat-pending').innerText = pending;
+        document.getElementById('admin-stat-confirmed').innerText = confirmed;
+        document.getElementById('admin-stat-revenue').innerText = `₹${revenue.toLocaleString()}`;
+      }
+    }
+
+    function renderAdminBookings() {
+      const q = (document.getElementById('admin-booking-search')?.value || '').toLowerCase();
+      const bookings = getStoredBookings().filter(b => 
+        b.id.toLowerCase().includes(q) ||
+        b.customerName.toLowerCase().includes(q) ||
+        b.eventDate.toLowerCase().includes(q)
+      );
+
+      const container = document.getElementById('admin-bookings-list');
+      if (!container) return;
+
+      container.innerHTML = bookings.map(b => `
+        <div class="bg-studio-surface border border-studio-border rounded-xl p-4 text-xs space-y-3">
+          <div class="flex justify-between items-start">
+            <div>
+              <span class="font-black text-studio-gold text-sm">${b.id}</span>
+              <span class="font-bold text-white ml-2">${b.customerName}</span>
+              <div class="text-gray-400">${b.customerPhone} • ${b.customerEmail}</div>
+            </div>
+            <select onchange="updateBookingStatus('${b.id}', this.value)" class="bg-studio-card border border-studio-border rounded-lg px-2 py-1 text-xs text-white">
+              <option value="PENDING" ${b.status === 'PENDING' ? 'selected' : ''}>PENDING</option>
+              <option value="CONFIRMED" ${b.status === 'CONFIRMED' ? 'selected' : ''}>CONFIRMED</option>
+              <option value="COMPLETED" ${b.status === 'COMPLETED' ? 'selected' : ''}>COMPLETED</option>
+              <option value="CANCELLED" ${b.status === 'CANCELLED' ? 'selected' : ''}>CANCELLED</option>
+            </select>
+          </div>
+          <div class="text-gray-300">
+            <div><strong>Event:</strong> ${b.eventName}</div>
+            <div><strong>Schedule:</strong> ${b.eventDate} at ${b.eventTime} (${b.durationHours}h) • Venue: ${b.venueLocation}</div>
+            <div><strong>Package:</strong> ${b.packageName} • Est: ₹${b.estimatedTotal.toLocaleString()} • Paid: ₹${(b.amountPaid || 0).toLocaleString()} (${b.paymentStatus || 'PENDING'})</div>
+          </div>
+          <div class="flex flex-wrap items-center gap-2 pt-2 border-t border-studio-border">
+            <button onclick="recordBookingPayment('${b.id}')" class="bg-studio-card hover:bg-studio-border px-3 py-1.5 rounded-lg text-studio-gold text-[11px] font-bold">
+              Record Payment
+            </button>
+            <a href="https://wa.me/91${b.customerPhone.replace(/\\D/g,'')}?text=Hello%20${encodeURIComponent(b.customerName)}!%20Updating%20you%20regarding%20your%20Smile%20Studio%20booking%20${b.id}%20(${b.eventDate}).%20Status:%20${b.status}." target="_blank" class="bg-emerald-600/30 text-emerald-400 hover:bg-emerald-600 hover:text-white px-3 py-1.5 rounded-lg text-[11px] font-bold">
+              <i class="fa-brands fa-whatsapp mr-1"></i> WhatsApp
+            </a>
+            <button onclick="deleteBookingRecord('${b.id}')" class="text-rose-400 hover:text-rose-300 px-2 py-1 text-[11px]">
+              Delete
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function updateBookingStatus(id, newStatus) {
+      const all = getStoredBookings();
+      const b = all.find(item => item.id === id);
+      if (b) {
+        b.status = newStatus;
+        saveStoredBookings(all);
+        renderAdminBookings();
+      }
+    }
+
+    function recordBookingPayment(id) {
+      const amountStr = prompt("Enter payment amount received in INR (e.g. 25000):");
+      if (amountStr !== null) {
+        const amt = parseFloat(amountStr) || 0;
+        const all = getStoredBookings();
+        const b = all.find(item => item.id === id);
+        if (b) {
+          b.amountPaid = amt;
+          b.paymentStatus = amt >= b.estimatedTotal ? "PAID" : amt > 0 ? "PARTIAL" : "PENDING";
+          saveStoredBookings(all);
+          renderAdminBookings();
+        }
+      }
+    }
+
+    function deleteBookingRecord(id) {
+      if (confirm(`Are you sure you want to delete booking ${id}?`)) {
+        let all = getStoredBookings();
+        all = all.filter(b => b.id !== id);
+        saveStoredBookings(all);
+        renderAdminBookings();
+      }
+    }
+
+    function exportBookingsCSV() {
+      const bookings = getStoredBookings();
+      let csv = "Reference,Customer,Phone,Email,Date,Package,Total,Paid,Status\n";
+      bookings.forEach(b => {
+        csv += `"${b.id}","${b.customerName}","${b.customerPhone}","${b.customerEmail}","${b.eventDate}","${b.packageName}",${b.estimatedTotal},${b.amountPaid || 0},"${b.status}"\n`;
+      });
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.setAttribute('href', url);
+      a.setAttribute('download', `smile_studio_bookings_${Date.now()}.csv`);
+      a.click();
+    }
+
+    function renderAdminEnquiries() {
+      const enquiries = getStoredEnquiries();
+      const container = document.getElementById('admin-enquiries-list');
+      if (!container) return;
+
+      if (enquiries.length === 0) {
+        container.innerHTML = `<div class="text-xs text-gray-500 py-4">No customer enquiries received yet.</div>`;
+        return;
+      }
+
+      container.innerHTML = enquiries.map(e => `
+        <div class="bg-studio-surface border ${e.isRead ? 'border-studio-border' : 'border-studio-gold'} p-4 rounded-xl text-xs space-y-2">
+          <div class="flex justify-between items-start">
+            <div>
+              <span class="font-bold text-white">${e.name}</span>
+              ${!e.isRead ? '<span class="bg-studio-gold text-black text-[9px] font-bold px-1.5 py-0.5 rounded ml-2">NEW</span>' : ''}
+              <div class="text-gray-400">${e.phone} • ${e.email}</div>
+            </div>
+            <span class="text-studio-goldLight">${e.type}</span>
+          </div>
+          <p class="text-gray-300 bg-studio-card p-3 rounded-lg">${e.message}</p>
+          <div class="flex gap-2 pt-2">
+            <a href="https://wa.me/91${e.phone.replace(/\\D/g,'')}?text=Hello%20${encodeURIComponent(e.name)}!%20Replying%20to%20your%20inquiry%20with%20Smile%20Studio." target="_blank" class="bg-emerald-600/30 text-emerald-400 px-3 py-1.5 rounded-lg font-bold">
+              <i class="fa-brands fa-whatsapp mr-1"></i> WhatsApp Reply
+            </a>
+            ${!e.isRead ? `<button onclick="markEnquiryRead('${e.id}')" class="bg-studio-card px-3 py-1.5 rounded-lg text-gray-300">Mark Read</button>` : ''}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function markEnquiryRead(id) {
+      const all = getStoredEnquiries();
+      const found = all.find(e => e.id === id);
+      if (found) {
+        found.isRead = true;
+        saveStoredEnquiries(all);
+        renderAdminEnquiries();
+      }
+    }
+
+    function renderAdminCalendar() {
+      const container = document.getElementById('admin-blocked-dates-list');
+      if (!container) return;
+      container.innerHTML = blockedDates.map((b, i) => `
+        <div class="bg-studio-surface border border-rose-500/30 p-3 rounded-xl flex justify-between items-center text-xs">
+          <div>
+            <strong class="text-rose-400">${b.date}</strong>
+            <span class="text-gray-400 ml-2">${b.reason}</span>
+          </div>
+          <button onclick="removeBlockedDate(${i})" class="text-gray-500 hover:text-rose-400 p-1">
+            <i class="fa-solid fa-trash"></i>
+          </button>
+        </div>
+      `).join('');
+    }
+
+    function addBlockedDate() {
+      const d = document.getElementById('block-date-input').value;
+      const r = document.getElementById('block-reason-input').value || "Studio Blocked";
+      if (d) {
+        blockedDates.push({ date: d, reason: r });
+        renderAdminCalendar();
+        document.getElementById('block-date-input').value = '';
+        document.getElementById('block-reason-input').value = '';
+      }
+    }
+
+    function removeBlockedDate(index) {
+      blockedDates.splice(index, 1);
+      renderAdminCalendar();
+    }
+
+    function renderAdminPortfolio() {
+      const container = document.getElementById('admin-portfolio-list');
+      if (!container) return;
+      container.innerHTML = portfolioItems.map((p, i) => `
+        <div class="bg-studio-surface border border-studio-border p-3 rounded-xl flex items-center gap-3 text-xs">
+          <img src="${p.img}" class="w-12 h-12 rounded-lg object-cover">
+          <div class="flex-grow min-w-0">
+            <div class="font-bold text-white truncate">${p.title}</div>
+            <div class="text-gray-400">${p.cat} • ${p.type}</div>
+          </div>
+          <button onclick="removePortfolioItem(${i})" class="text-gray-500 hover:text-rose-400 p-2">
+            <i class="fa-solid fa-trash"></i>
+          </button>
+        </div>
+      `).join('');
+    }
+
+    function addPortfolioItem() {
+      const title = document.getElementById('port-title').value.trim();
+      const cat = document.getElementById('port-cat').value.trim() || "Wedding";
+      const type = document.getElementById('port-type').value;
+      const img = document.getElementById('port-img').value.trim() || "https://images.unsplash.com/photo-1519741497674-611481863552?w=800&auto=format&fit=crop";
+      const desc = document.getElementById('port-desc').value.trim();
+
+      if (title) {
+        portfolioItems.unshift({ id: "p_" + Date.now(), title, cat, type, img, desc });
+        renderAdminPortfolio();
+        renderGallery();
+        document.getElementById('port-title').value = '';
+        document.getElementById('port-desc').value = '';
+      }
+    }
+
+    function removePortfolioItem(index) {
+      portfolioItems.splice(index, 1);
+      renderAdminPortfolio();
+      renderGallery();
+    }
+
+    function openLightbox(title, img, desc, type) {
+      alert(`${title}\n\n${desc}\n\nType: ${type}\nTo book this style, tap 'Book Now' in the navigation bar!`);
+    }
+  </script>
+</body>
+</html>
