@@ -2,6 +2,9 @@ package com.example.ui.screens
 
 import android.content.Intent
 import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -32,6 +35,8 @@ import androidx.compose.material.icons.filled.Call
 import androidx.compose.material.icons.filled.Chat
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.CloudUpload
+import androidx.compose.material.icons.filled.Videocam
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Email
@@ -1013,6 +1018,19 @@ private fun AddMediaDialog(
     var duration by remember { mutableStateOf("03:30") }
     var isFeatured by remember { mutableStateOf(false) }
 
+    // Android Photo & Video Picker (ActivityResultContracts.PickVisualMedia)
+    val mediaPickerLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.PickVisualMedia()
+    ) { uri: Uri? ->
+        if (uri != null) {
+            val uriString = uri.toString()
+            imageUrl = uriString
+            if (type == "VIDEO") {
+                videoUrl = uriString
+            }
+        }
+    }
+
     Dialog(onDismissRequest = onDismiss) {
         Surface(
             shape = RoundedCornerShape(16.dp),
@@ -1021,13 +1039,14 @@ private fun AddMediaDialog(
             modifier = Modifier.fillMaxWidth()
         ) {
             Column(modifier = Modifier.padding(18.dp)) {
-                Text("Add Portfolio Item", fontWeight = FontWeight.Bold, fontSize = 16.sp, color = TextPrimary)
+                Text("Upload Photo or Video", fontWeight = FontWeight.Bold, fontSize = 16.sp, color = TextPrimary)
+                Text("Add media directly to public client gallery", fontSize = 11.sp, color = TextSecondary)
                 Spacer(modifier = Modifier.height(10.dp))
 
                 OutlinedTextField(
                     value = title,
                     onValueChange = { title = it },
-                    placeholder = { Text("Media Title", color = TextSecondary) },
+                    placeholder = { Text("Title (e.g. Royal Wedding)", color = TextSecondary) },
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth()
                 )
@@ -1036,7 +1055,7 @@ private fun AddMediaDialog(
                 OutlinedTextField(
                     value = category,
                     onValueChange = { category = it },
-                    placeholder = { Text("Category (e.g. Wedding, Pre-Wedding)", color = TextSecondary) },
+                    placeholder = { Text("Category (Wedding, Pre-Wedding, etc.)", color = TextSecondary) },
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth()
                 )
@@ -1055,12 +1074,74 @@ private fun AddMediaDialog(
                     )
                 }
 
-                Spacer(modifier = Modifier.height(6.dp))
+                Spacer(modifier = Modifier.height(10.dp))
+
+                // Upload button from device storage
+                Button(
+                    onClick = {
+                        val request = if (type == "VIDEO") {
+                            PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.VideoOnly)
+                        } else {
+                            PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                        }
+                        mediaPickerLauncher.launch(request)
+                    },
+                    colors = ButtonDefaults.buttonColors(containerColor = GoldContainer, contentColor = GoldLight),
+                    shape = RoundedCornerShape(10.dp),
+                    border = androidx.compose.foundation.BorderStroke(1.dp, GoldPrimary),
+                    modifier = Modifier.fillMaxWidth().height(42.dp)
+                ) {
+                    Icon(
+                        imageVector = if (type == "VIDEO") Icons.Default.Videocam else Icons.Default.CloudUpload,
+                        contentDescription = null,
+                        modifier = Modifier.size(16.dp)
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(
+                        text = "Choose ${if (type == "VIDEO") "Video" else "Photo"} from Device",
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                // Live Preview Thumbnail
+                if (imageUrl.isNotBlank()) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(95.dp)
+                            .clip(RoundedCornerShape(8.dp))
+                            .background(Color.Black)
+                            .border(1.dp, DarkBorderGold, RoundedCornerShape(8.dp))
+                    ) {
+                        StudioImage(
+                            url = imageUrl,
+                            contentDescription = "Selected media preview",
+                            modifier = Modifier.fillMaxSize()
+                        )
+                        Surface(
+                            modifier = Modifier.align(Alignment.TopEnd).padding(4.dp),
+                            color = Color.Black.copy(alpha = 0.75f),
+                            shape = RoundedCornerShape(4.dp)
+                        ) {
+                            Text(
+                                text = "Ready to Publish",
+                                fontSize = 9.sp,
+                                color = SuccessGreen,
+                                fontWeight = FontWeight.Bold,
+                                modifier = Modifier.padding(horizontal = 4.dp, vertical = 2.dp)
+                            )
+                        }
+                    }
+                    Spacer(modifier = Modifier.height(8.dp))
+                }
 
                 OutlinedTextField(
                     value = imageUrl,
                     onValueChange = { imageUrl = it },
-                    placeholder = { Text("Image or Thumbnail URL", color = TextSecondary) },
+                    placeholder = { Text("Or paste image/thumbnail URL", color = TextSecondary) },
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth()
                 )

@@ -585,24 +585,52 @@
         <!-- Tab: Portfolio -->
         <div id="admin-tab-portfolio" class="admin-tab-content hidden space-y-6">
           <div class="bg-studio-surface border border-studio-border rounded-2xl p-6 max-w-xl">
-            <h3 class="text-sm font-bold text-studio-gold mb-3">Add Portfolio Photo or Video</h3>
-            <div class="space-y-3">
-              <input type="text" id="port-title" placeholder="Item Title (e.g. Palace Wedding)" class="w-full bg-studio-card border border-studio-border rounded-xl px-3 py-2 text-xs text-white">
+            <h3 class="text-sm font-bold text-studio-gold mb-1">Upload Photo or Video to Gallery</h3>
+            <p class="text-xs text-gray-400 mb-4">Choose images or video clips directly from your phone or computer to publish to the public client gallery.</p>
+            
+            <div class="space-y-4">
+              <!-- Upload Area -->
+              <input type="file" id="port-file-input" accept="image/*,video/*" class="hidden" onchange="handleAdminFileUpload(event)">
+              <div onclick="document.getElementById('port-file-input').click()" class="border-2 border-dashed border-studio-gold/60 hover:border-studio-gold bg-studio-card/80 hover:bg-studio-card rounded-2xl p-6 text-center cursor-pointer transition-all group">
+                <div class="w-12 h-12 rounded-full bg-studio-goldBg border border-studio-gold text-studio-gold flex items-center justify-center text-xl mx-auto mb-2 group-hover:scale-110 transition-transform">
+                  <i class="fa-solid fa-cloud-arrow-up"></i>
+                </div>
+                <div class="text-xs font-bold text-white group-hover:text-studio-goldLight">Click to Choose Photo or Video from Device</div>
+                <div class="text-[10px] text-gray-400 mt-1">Upload directly from device storage (JPG, PNG, WEBP, MP4, MOV, WebM)</div>
+              </div>
+
+              <!-- Live Upload Preview -->
+              <div id="port-upload-preview" class="hidden bg-black/60 rounded-xl p-3 border border-studio-border flex items-center gap-3">
+                <div id="port-preview-media" class="w-16 h-16 rounded-lg bg-studio-surface overflow-hidden flex items-center justify-center flex-shrink-0"></div>
+                <div class="flex-grow min-w-0 text-xs">
+                  <div id="port-preview-name" class="font-bold text-white truncate">file.jpg</div>
+                  <div id="port-preview-size" class="text-gray-400 text-[10px]">Photo loaded from device</div>
+                  <span class="inline-block mt-1 bg-emerald-950 text-emerald-400 text-[9px] font-bold px-2 py-0.5 rounded-full border border-emerald-800">Ready to Publish</span>
+                </div>
+              </div>
+
+              <input type="text" id="port-title" placeholder="Item Title (e.g. Palace Wedding Reception)" class="w-full bg-studio-card border border-studio-border rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-studio-gold">
+              
               <div class="grid grid-cols-2 gap-3">
-                <input type="text" id="port-cat" placeholder="Category (e.g. Wedding)" class="bg-studio-card border border-studio-border rounded-xl px-3 py-2 text-xs text-white">
-                <select id="port-type" class="bg-studio-card border border-studio-border rounded-xl px-3 py-2 text-xs text-white">
+                <input type="text" id="port-cat" placeholder="Category (e.g. Wedding, Pre-Wedding, Portraits)" class="bg-studio-card border border-studio-border rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-studio-gold">
+                <select id="port-type" class="bg-studio-card border border-studio-border rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-studio-gold">
                   <option value="PHOTO">PHOTO</option>
                   <option value="VIDEO">VIDEO</option>
                 </select>
               </div>
-              <input type="text" id="port-img" placeholder="Image URL (Unsplash or direct asset)" class="w-full bg-studio-card border border-studio-border rounded-xl px-3 py-2 text-xs text-white">
-              <input type="text" id="port-desc" placeholder="Caption description" class="w-full bg-studio-card border border-studio-border rounded-xl px-3 py-2 text-xs text-white">
-              <button onclick="addPortfolioItem()" class="gold-gradient text-black font-bold px-5 py-2 rounded-xl text-xs">
-                Add to Public Gallery
+
+              <input type="text" id="port-img" placeholder="Or paste Image URL if hosted online" class="w-full bg-studio-card border border-studio-border rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-studio-gold">
+              <input type="text" id="port-desc" placeholder="Caption description (rituals, location, couple details)" class="w-full bg-studio-card border border-studio-border rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-studio-gold">
+              
+              <button onclick="addPortfolioItem()" class="w-full gold-gradient text-black font-extrabold py-2.5 rounded-xl text-xs hover:brightness-110 flex items-center justify-center gap-2">
+                <i class="fa-solid fa-plus-circle"></i> Add to Public Gallery
               </button>
             </div>
           </div>
-          <div id="admin-portfolio-list" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
+          <div>
+            <h3 class="text-sm font-bold text-white mb-3">Published Portfolio Items</h3>
+            <div id="admin-portfolio-list" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
+          </div>
         </div>
       </div>
     </section>
@@ -1682,11 +1710,44 @@
       `).join('');
     }
 
+    let uploadedMediaDataUrl = null;
+
+    function handleAdminFileUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const isVideo = file.type.startsWith('video/');
+      document.getElementById('port-type').value = isVideo ? 'VIDEO' : 'PHOTO';
+
+      if (!document.getElementById('port-title').value) {
+        document.getElementById('port-title').value = file.name.replace(/\.[^/.]+$/, "");
+      }
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        uploadedMediaDataUrl = e.target.result;
+        document.getElementById('port-img').value = uploadedMediaDataUrl;
+
+        const previewContainer = document.getElementById('port-upload-preview');
+        const mediaSlot = document.getElementById('port-preview-media');
+        document.getElementById('port-preview-name').innerText = file.name;
+        document.getElementById('port-preview-size').innerText = `${(file.size / (1024 * 1024)).toFixed(2)} MB • ${isVideo ? 'Video' : 'Photo'}`;
+
+        if (isVideo) {
+          mediaSlot.innerHTML = `<video src="${uploadedMediaDataUrl}" class="w-full h-full object-cover" muted autoplay loop></video>`;
+        } else {
+          mediaSlot.innerHTML = `<img src="${uploadedMediaDataUrl}" class="w-full h-full object-cover">`;
+        }
+        previewContainer.classList.remove('hidden');
+      };
+      reader.readAsDataURL(file);
+    }
+
     function addPortfolioItem() {
       const title = document.getElementById('port-title').value.trim();
       const cat = document.getElementById('port-cat').value.trim() || "Wedding";
       const type = document.getElementById('port-type').value;
-      const img = document.getElementById('port-img').value.trim() || "https://images.unsplash.com/photo-1519741497674-611481863552?w=800&auto=format&fit=crop";
+      const img = uploadedMediaDataUrl || document.getElementById('port-img').value.trim() || "https://images.unsplash.com/photo-1519741497674-611481863552?w=800&auto=format&fit=crop";
       const desc = document.getElementById('port-desc').value.trim();
 
       if (title) {
@@ -1695,6 +1756,14 @@
         renderGallery();
         document.getElementById('port-title').value = '';
         document.getElementById('port-desc').value = '';
+        document.getElementById('port-img').value = '';
+        uploadedMediaDataUrl = null;
+        document.getElementById('port-upload-preview')?.classList.add('hidden');
+        const fileInput = document.getElementById('port-file-input');
+        if (fileInput) fileInput.value = '';
+        alert("Success! Photo/Video added directly to Smile Studio public gallery.");
+      } else {
+        alert("Please enter a title for the media item.");
       }
     }
 
