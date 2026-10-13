@@ -1,0 +1,6 @@
+{
+  "name": "Smile Studio",
+  "description": "Premium photography and videography studio for weddings, cinematic films, portraits, and events.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

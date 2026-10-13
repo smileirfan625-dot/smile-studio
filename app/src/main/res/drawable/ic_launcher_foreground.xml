@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Camera Body Outline -->
+    <path
+        android:fillColor="#00000000"
+        android:strokeWidth="3.2"
+        android:strokeColor="#E6C665"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M31,43 C31,39.5 33.5,37 37,37 L42,37 L45,32 L63,32 L66,37 L71,37 C74.5,37 77,39.5 77,43 L77,69 C77,72.5 74.5,75 71,75 L37,75 C33.5,75 31,72.5 31,69 Z" />
+
+    <!-- Central Lens Outer Ring -->
+    <path
+        android:fillColor="#00000000"
+        android:strokeWidth="2.8"
+        android:strokeColor="#F5D061"
+        android:pathData="M54,42 A14,14 0 1,1 53.9,42" />
+
+    <!-- Aperture Core -->
+    <path
+        android:fillColor="#FFDF73"
+        android:pathData="M54,50 A6,6 0 1,1 53.9,50" />
+
+    <!-- Aperture Blades Accent Lines -->
+    <path
+        android:strokeColor="#0A0A0C"
+        android:strokeWidth="1.2"
+        android:pathData="M54,50 L58,45 M58,54 L62,56 M54,58 L52,63 M48,54 L44,55 M49,48 L46,45" />
+
+    <!-- Flash / Viewfinder dot -->
+    <path
+        android:fillColor="#FFE699"
+        android:pathData="M70,43 A2,2 0 1,1 69.9,43" />
+
+    <!-- Signature Smile Arc below camera representing 'Smile Studio' -->
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#FFD700"
+        android:strokeWidth="3.2"
+        android:strokeLineCap="round"
+        android:pathData="M40,79 C45,86 63,86 68,79" />
+
+    <!-- Sparkle Accent on top right -->
+    <path
+        android:fillColor="#FFF5CC"
+        android:pathData="M75,29 L76.5,33 L80.5,34.5 L76.5,36 L75,40 L73.5,36 L69.5,34.5 L73.5,33 Z" />
+</vector>
